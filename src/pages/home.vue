@@ -29,15 +29,23 @@
                     </div>
                 </a>
                 <a class="navbar-brand" href="#">
+
                     <img src="@/assets/logo.png" style="width: 60%;" alt="Logo" class="w-60 d-inline-block ">
+
                 </a>
 
             </div>
+
         </nav>
+
         <div class="col-12 flex-page d-flex" style="height: 100vh;">
             <div class="col-md-6 col-12 col-nuvem">
 
 
+
+                <div @click="openModalNotificacao" class="icon-container">
+                    <div class="notification-badge">{{ notification.Cota.length }}</div>
+                </div>
 
                 <div class="nuvem">
                     <div class="speech-bubble">
@@ -112,6 +120,7 @@
                         <h5 class="text-center titulo-modal">Com quantas cotas você quer presentear?</h5>
                         <div class="btn-number text-center">
                             <p style="color: red">{{ errors.cotas }}</p>
+                            <p style="color: red">{{ errors.cotasMin }}</p>
                             <button type="button" @click="enviar.cotas--" class="btn btn-plus">-</button>
                             <input type="number" class="input-number" v-model="enviar.cotas" min="0" max="10">
                             <button type="button" @click="enviar.cotas++" class="btn btn-plus">+</button>
@@ -278,6 +287,8 @@
                         <h5 class="text-center titulo-modal">Com quantas cotas você quer presentear?</h5>
                         <div class="btn-number text-center">
                             <p style="color: red">{{ errors.cotas }}</p>
+                            <p style="color: red">{{ errors.cotasMin }}</p>
+
                             <button type="button" @click="enviar.cotas--" class="btn btn-plus">-</button>
                             <input type="number" class="input-number" v-model="enviar.cotas" min="0" max="10">
                             <button type="button" @click="enviar.cotas++" class="btn btn-plus">+</button>
@@ -292,187 +303,399 @@
             </div>
         </div>
 
+
+        <!-- Modal Notificacao -->
+        <div class="modal" tabindex="-1" role="dialog" :class="{ 'show': showNotificacao, 'd-block': showNotificacao }">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form @submit.prevent="postAceitarNotificacao" class="modal-body">
+                        <button type="button" class="btn" @click="closeModalNotificacao">
+                            <span>&times;</span>
+                        </button>
+                        <h3 class="text-center titulo-modal">Suas notificaçãoes</h3>
+                        <div v-if="notification.Cota.length > 0" class="btn-number text-center">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Id</th>
+                                        <th scope="col">Mensagem</th>
+                                        <th scope="col">Ação</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(item, index) in notification.Cota" :key="item.id">
+                                        <th scope="row">{{ index }}</th>
+                                        <td>Você recebeu <b>{{ item.Quantidade }}</b> cotas de <b>{{ item.EmailOrigem }}</b>
+                                        </td>
+                                        <td>
+                                            <input type="hidden">
+                                            <input v-model="item.isChecked" @change="checkboxChanged(item)"
+                                                type="checkbox" />
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <h5 v-else class="text-center titulo-modal">Você não possui nenhuma notificação</h5>
+
+
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-adquirir">Aceitar todos</button>
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
   
 <script>
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { useToast } from "vue-toastification";
+import router from '@/router';
+
 export default {
     name: 'HomeView',
+    setup() {
+        const toast = useToast();
 
-    data() {
-        return {
-            isLoading: true,
-            data: {
-            },
-            isMobile: false,
-            showCardAdquirir: false,
-            showModalAdquirir: false,
-            showModalPresentear: false,
-            showModalPresente: false,
-            showCardPresente: false,
-            showCardPresentear: false,
+        const isLoading = ref(true);
+        const data = ref({});
+        const isMobile = ref(false);
+        const showCardAdquirir = ref(false);
+        const showModalAdquirir = ref(false);
+        const showModalPresentear = ref(false);
+        const showModalPresente = ref(false);
+        const showCardPresente = ref(false);
+        const showCardPresentear = ref(false);
+        const isToastVisible = ref(true);
+        const showNotificacao = ref(false);
+        const cotas = ref(0);
+        const enviar = ref({
+            nome: '',
+            email: '',
             cotas: 0,
-            enviar: {
-                nome: '',
-                email: '',
-                cotas: 0
-            },
-            errors: {
-                nome: '',
-                email: '',
-                cotas: '',
-                cotaAquirir: ''
-            },
-            currentIndex: 0,
 
-        }
-    },
-    created() {
-        // Add a listener to the 'resize' event
-        window.addEventListener('resize', this.checkIfMobile);
-        // Initial check on page load
-        this.checkIfMobile();
-    },
-    beforeUnmount() {
-        window.removeEventListener('resize', this.checkIfMobile);
-    },
+        });
+        const errors = ref({
+            nome: '',
+            email: '',
+            cotas: '',
+            cotaAquirir: '',
+            cotasMin: ''
+        });
+        const notification = ref({
+            Cota: {
+                isChecked: false
+            }
+        });
+        const currentIndex = ref(0);
 
-    computed: {
-        arvorePlantada() {
-            const resultado = this.data.QuantidadeCotas / 20;
+
+
+        const arvorePlantada = computed(() => {
+            const resultado = data.value.QuantidadeCotas / 20;
             return Math.trunc(resultado);
-        },
-        folhasCota() {
-            return this.data.QuantidadeCotas % 20;
-        }
-    },
+        });
 
-    mounted() {
-        const apiUrl = "https://7fhxhtheo0.execute-api.us-east-1.amazonaws.com/action-neutralizacarbon/user";
+        const folhasCota = computed(() => data.value.QuantidadeCotas % 20);
 
-        fetch(apiUrl, {
-            method: 'GET',
-            headers: {
-                'AuthToken': localStorage.getItem("token")
-            },
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Erro na resposta da API');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Defina isLoading como false após receber os dados
-                this.isLoading = false;
-                this.data = data;
-            })
-            .catch(error => {
-                console.error('Erro ao fazer a solicitação GET:', error);
-                // Certifique-se de definir isLoading como false em caso de erro também
-                this.isLoading = false;
-            });
-    },
+        const checkIfMobile = () => {
+            isMobile.value = window.innerWidth <= 768;
+        };
 
-    methods: {
-        nextSlide() {
-            this.currentIndex = (this.currentIndex + 1) % this.data.Projeto.length;
-        },
-        prevSlide() {
-            this.currentIndex = (this.currentIndex - 1 + this.data.Projeto.length) % this.data.Projeto.length;
-        },
+        const checkboxChanged = (item) => {
+            console.log(`Checkbox para ${item.EmailOrigem} está marcado como ${item.isChecked ? 'true' : 'false'}`);
+        };
 
-        checkIfMobile() {
-            this.isMobile = window.innerWidth <= 768;
-        },
-        openModalAdquirir() {
-            this.showModalAdquirir = true;
-            document.body.classList.add('modal-open'); // Adicione a classe modal-open para bloquear a rolagem do corpo quando o modal está aberto
-        },
 
-        closeModalAdquirir() {
-            this.showModalAdquirir = false;
+
+
+        const openModalAdquirir = () => {
+            showModalAdquirir.value = true;
+            document.body.classList.add('modal-open');
+        };
+
+        const closeModalAdquirir = () => {
+            showModalAdquirir.value = false;
             document.body.classList.remove('modal-open');
-        },
+        };
 
-        openModalPresente() {
-            this.showModalPresente = true;
-            document.body.classList.add('modal-open'); // Adicione a classe modal-open para bloquear a rolagem do corpo quando o modal está aberto
-        },
+        const openModalPresente = () => {
+            showModalPresente.value = true;
+            document.body.classList.add('modal-open');
+        };
 
-        closeModalPresente() {
-            this.showModalPresente = false;
+        const closeModalPresente = () => {
+            showModalPresente.value = false;
             document.body.classList.remove('modal-open');
-        },
+        };
+
+        const openModalPresentear = () => {
+            showModalPresentear.value = true;
+            document.body.classList.add('modal-open');
+        };
+
+        const closeModalPresentear = () => {
+            showModalPresentear.value = false;
+            document.body.classList.remove('modal-open');
+        };
+        const openModalNotificacao = () => {
+            showNotificacao.value = true;
+            document.body.classList.add('modal-open');
+        };
+
+        const closeModalNotificacao = () => {
+            showNotificacao.value = false;
+            document.body.classList.remove('modal-open');
+        };
+
+        const nextSlide = () => {
+            currentIndex.value = (currentIndex.value + 1) % data.value.Projeto.length;
+        };
+
+        const prevSlide = () => {
+            currentIndex.value = (currentIndex.value - 1 + data.value.Projeto.length) % data.value.Projeto.length;
+        };
 
 
-        openModalPresentear() {
-            this.showModalPresentear = true;
-            document.body.classList.add('modal-open'); // Adicione a classe modal-open para bloquear a rolagem do corpo quando o modal está aberto
-        },
 
-        closeModalPresentear() {
-            this.showModalPresentear = false;
-            document.body.classList.remove('modal-open'); // Remova a classe modal-open para permitir a rolagem do corpo novamente
-        },
+        onMounted(() => {
+            window.addEventListener('resize', checkIfMobile);
+            checkIfMobile();
+            getUser();
+            getPresente();
+        });
 
-        submit() {
-            if (this.enviar.nome != '' && this.enviar.email != '' || this.enviar.cotas != 0) {
+        onBeforeUnmount(() => {
+            window.removeEventListener('resize', checkIfMobile);
+        });
 
+        const getUser = () => {
+            const apiUrl = 'https://7fhxhtheo0.execute-api.us-east-1.amazonaws.com/action-neutralizacarbon/user';
+
+
+            fetch(apiUrl, {
+                method: 'GET',
+                headers: {
+                    'AuthToken': localStorage.getItem('token'),
+                },
+            })
+                .then((response) => {
+                    if (response.status == 401) {
+                        return router.push("/login")
+                    }
+                    if (!response.ok) {
+                        throw new Error('Erro na resposta da API');
+                    }
+
+                    return response.json();
+                })
+                .then((responseData) => {
+                    isLoading.value = false;
+                    data.value = responseData;
+                })
+                .catch((error) => {
+                    console.error('Erro ao fazer a solicitação GET:', error);
+                    isLoading.value = false;
+                });
+        };
+
+        const getPresente = () => {
+            const apiUrl = 'https://7fhxhtheo0.execute-api.us-east-1.amazonaws.com/action-neutralizacarbon/transfer';
+
+            fetch(apiUrl, {
+                method: 'GET',
+                headers: {
+                    'AuthToken': localStorage.getItem('token'),
+                },
+            })
+                .then((response) => {
+                    if (response.status == 401) {
+                        return router.push("/login")
+                    }
+
+                    if (!response.ok) {
+                        throw new Error('Erro na resposta da API');
+                    }
+
+                    return response.json();
+                })
+                .then((responseData) => {
+                    isLoading.value = false;
+                    notification.value = responseData;
+                })
+                .catch((error) => {
+                    console.error('Erro ao fazer a solicitação GET:', error);
+                });
+        };
+
+        const postPresente = () => {
+            const apiUrl = 'https://7fhxhtheo0.execute-api.us-east-1.amazonaws.com/action-neutralizacarbon/transfer';
+
+            const dataToSend = {
+                emailDestino: enviar.value.email,
+                quantidade: enviar.value.cotas,
+                nome: enviar.value.nome
+            }
+
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'AuthToken': localStorage.getItem('token'),
+                },
+                body: JSON.stringify(dataToSend)
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Erro na resposta da API');
+                    }
+                    return response.json();
+                })
+                .then((responseData) => {
+                    console.log(responseData);
+                })
+                .catch((error) => {
+                    console.error('Erro ao fazer a solicitação GET:', error);
+                });
+        };
+
+
+        const postAceitarNotificacao = () => {
+            const apiUrl = 'https://7fhxhtheo0.execute-api.us-east-1.amazonaws.com/action-neutralizacarbon/transfer/accepted';
+
+            const checkedItems = notification.value.Cota.filter(item => item.isChecked);
+
+            const dataToSend = {
+                Operacao: "resgate",
+                TransferenciaKey: checkedItems.map(item => ({ ChaveResgate: item.ChaveResgate })),
+            }
+
+            fetch(apiUrl, {
+                method: 'POST',
+                body: JSON.stringify(dataToSend)
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Erro na resposta da API');
+                    }
+                    return response.json();
+                })
+                .then((responseData) => {
+                    console.log(responseData);
+                })
+                .catch((error) => {
+                    console.error('Erro ao fazer a solicitação POST:', error);
+                });
+        };
+
+
+
+
+        const submit = () => {
+            if (enviar.value.nome !== '' && enviar.value.email !== '' && enviar.value.cotas !== 0 && enviar.value.cotas <= 1) {
                 if (this.isMobile) {
-                    this.showCardPresentear = false
-                    this.showCardPresente = true
+                    showCardPresentear.value = false;
+                    showCardPresente.value = true;
+                    postPresente()
                 } else {
-                    this.closeModalPresentear()
-                    this.openModalPresente();
+                    closeModalPresentear();
+                    openModalPresente();
                 }
-
             } else {
-                if (this.enviar.nome == '') {
-                    this.errors.nome = 'O campo nome não pode estar vazio';
+                if (enviar.value.nome === '') {
+                    errors.value.nome = 'O campo nome não pode estar vazio';
                 }
-                if (this.enviar.email == '') {
-                    this.errors.email = 'O campo email não pode estar vazio';
+                if (enviar.value.email === '') {
+                    errors.value.email = 'O campo email não pode estar vazio';
                 }
-                if (this.enviar.cotas == 0) {
-                    this.errors.cotas = 'O campo nome não pode estar igual a zero';
+                if (enviar.value.cotas === 0) {
+                    errors.value.cotas = 'O campo nome não pode estar igual a zero';
+                }
+                if (enviar.value.cotas >= 1) {
+                    errors.value.cotasMin = 'A quantidade de cotas não pode ser menor que 0';
                 }
             }
-        },
+        };
 
-        submitAdquirir() {
-            if (this.cotas == 0) {
-                this.errors.cotaAquirir = 'O valor da cota não pode ser igual a zero';
+        const submitAdquirir = () => {
+            if (cotas.value === 0) {
+                errors.value.cotaAquirir = 'O valor da cota não pode ser igual a zero';
             } else {
-                this.closeModalAdquirir();
+                closeModalAdquirir();
                 console.log('Cotas adquiridas com sucesso');
             }
-        },
+        };
 
-        showCardAdquirirMobile() {
-            this.showCardAdquirir = true
-            if (this.showCardPresentear == true) {
-                this.showCardPresentear = false
+
+        const showCardAdquirirMobile = () => {
+            showCardAdquirir.value = true;
+            if (showCardPresentear.value) {
+                showCardPresentear.value = false;
             }
-        },
+        };
 
-        showCardPresentearMobile() {
-            this.showCardPresentear = true
-            if (this.showCardAdquirir == true) {
-                this.showCardAdquirir = false
+        const showCardPresentearMobile = () => {
+            showCardPresentear.value = true;
+            if (showCardAdquirir.value) {
+                showCardAdquirir.value = false;
             }
-        }
+        };
 
 
+
+        return {
+            toast,
+            isLoading,
+            data,
+            isMobile,
+            showCardAdquirir,
+            showModalAdquirir,
+            showModalPresentear,
+            showModalPresente,
+            showCardPresente,
+            showCardPresentear,
+            isToastVisible,
+            cotas,
+            enviar,
+            errors,
+            currentIndex,
+            showNotificacao,
+            notification,
+            arvorePlantada,
+            folhasCota,
+            checkIfMobile,
+            openModalAdquirir,
+            closeModalAdquirir,
+            openModalPresente,
+            closeModalPresente,
+            openModalPresentear,
+            closeModalPresentear,
+            nextSlide,
+            prevSlide,
+            getUser,
+            getPresente,
+            submit,
+            submitAdquirir,
+            showCardAdquirirMobile,
+            showCardPresentearMobile,
+            openModalNotificacao,
+            closeModalNotificacao,
+            postAceitarNotificacao,
+            checkboxChanged,
+        };
     },
 
-
-}
+};
 </script>
-  
 
 <style scoped>
-
 .loading {
     width: 48px;
     height: 48px;
@@ -485,14 +708,48 @@ export default {
     position: absolute;
     top: 50%;
     left: 50%;
-    }
+}
 
-    @keyframes rotation {
+@keyframes rotation {
     0% {
         transform: rotate(0deg);
     }
+
     100% {
         transform: rotate(360deg);
     }
-    } 
+}
+
+.icon-container {
+    position: relative;
+    width: 40px;
+    /* Largura do ícone */
+    height: 40px;
+    /* Altura do ícone */
+    background-color: #135b2d;
+    /* Cor de fundo do ícone */
+    border-radius: 50%;
+    /* Formato de círculo */
+}
+
+.notification-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #e74c3c;
+    /* Cor de fundo do número de notificações */
+    color: #fff;
+    /* Cor do texto */
+    border-radius: 50%;
+    /* Formato de círculo */
+    width: 20px;
+    /* Largura do número */
+    height: 20px;
+    /* Altura do número */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    /* Tamanho da fonte do número */
+}
 </style>
