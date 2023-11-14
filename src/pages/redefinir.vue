@@ -41,7 +41,7 @@
 
 
                     <div class="wrap-input100 validate-input" data-validate="Password is required">
-                        <input class="input100" v-model="senhaAtual" type="password" name="pass" placeholder="Senha atual">
+                        <input class="input100" v-model="usuario.senhaAtual" type="password" name="pass" placeholder="Senha atual">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
                             <i class="fa fa-lock" aria-hidden="true"></i>
@@ -49,7 +49,7 @@
                     </div>
 
                     <div class="wrap-input100 validate-input" data-validate="Password is required">
-                        <input @input="validatePassword" class="input100" v-model="novaSenha" type="password" name="pass"
+                        <input @input="validatePassword" class="input100" v-model="usuario.novaSenha" type="password" name="pass"
                             placeholder="Nova senha">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
@@ -60,7 +60,7 @@
                         {{ erroNewPassword.erro }}
                     </p>
                     <div class="wrap-input100 validate-input" data-validate="Password is required">
-                        <input @input="validateNewPassword" class="input100" v-model="repeteSenha" type="password"
+                        <input @input="validateNewPassword" class="input100" v-model="usuario.repeteSenha" type="password"
                             name="pass" placeholder="Confirmar senha">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
@@ -106,100 +106,67 @@
 </template>
   
 <script>
-import router from '@/router';
+import {ref} from 'vue';
+import { useUsuarioStore } from "@/stores/UserStore";
 
 export default {
     name: 'RedefinirView',
-    data() {
-        return {
-            usuario: 'guilherme@gmail.com',
-            senhaAtual: '',
-            novaSenha: "",
-            repeteSenha: "",
-            erroNewPassword: {
-                erroMinimo: "A senha deve ter pelo menos 8 caracteres",
+    setup() {
+        const usuario = useUsuarioStore();
+
+        const erroNewPassword = ref({
+            erroMinimo: "A senha deve ter pelo menos 8 caracteres",
                 erroMinusculo: "A senha deve conter pelo menos um caractere Maiusculo",
                 erroSimbolo:
                     "A senha deve conter pelo menos um número, símbolo ou caractere de espaço",
-            }
-        };
-    },
-    methods: {
-        validatePassword() {
-            const newPassword = this.novaSenha;
+        })
+
+        const validatePassword = () => {
+            const newPassword = usuario.novaSenha;
             // Verifica se a senha tem pelo menos 8 caracteres
             if (newPassword.length >= 8) {
-                this.erroNewPassword.erroMinimo = "";
+                erroNewPassword.value.erroMinimo = "";
             } else {
-                this.erroNewPassword.erroMinimo = "A senha deve ter pelo menos 8 caracteres";
+                erroNewPassword.value.erroMinimo = "A senha deve ter pelo menos 8 caracteres";
             }
 
             // Verifica se a senha tem pelo menos uma letra minúscula
             if (/[A-Z]/.test(newPassword)) {
-                this.erroNewPassword.erroMinusculo = "";
+                erroNewPassword.value.erroMinusculo = "";
             } else {
-                this.erroNewPassword.erroMinusculo =
+                erroNewPassword.value.erroMinusculo =
                     "A senha deve conter pelo menos um caractere Maiusculo";
             }
 
             // Verifica se a senha tem pelo menos um número, símbolo ou caractere de espaço em branco
             if (/[0-9!@#$%^&*()\s]/.test(newPassword)) {
-                this.erroNewPassword.erroSimbolo = "";
+                erroNewPassword.value.erroSimbolo = "";
             } else {
-                this.erroNewPassword.erroSimbolo =
+                erroNewPassword.value.erroSimbolo =
                     "A senha deve conter pelo menos um número, símbolo ou caractere de espaço.";
             }
-        },
+        }
 
-        validateNewPassword() {
-            if (this.novaSenha != this.repeteSenha) {
-                this.erroNewPassword.erro = "A confirmação não esta igual a nova senha!";
+        const validateNewPassword = () => {
+            if (usuario.novaSenha != usuario.repeteSenha) {
+                erroNewPassword.value.erro = "A confirmação não esta igual a nova senha!";
             } else {
-                this.erroNewPassword.erro = "";
+                erroNewPassword.value.erro = "";
             }
-        },
+        }
 
-        redefinir() {
-            const apiUrl = 'https://cognito-idp.us-east-1.amazonaws.com/';
-
-            const dataToSend = {
-                ChallengeName: "NEW_PASSWORD_REQUIRED",
-                ChallengeResponses: {
-                    USERNAME: this.usuario,
-                    NEW_PASSWORD: this.repeteSenha
-                },
-                ClientId: "2ba84o1sr4kpn5ucbvgg6sm40o",
-                Session: localStorage.getItem("session")
-            }
-
-            fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'X-Amz-Target': 'AWSCognitoIdentityProviderService.RespondToAuthChallenge',
-                    'Content-Type': 'application/x-amz-json-1.1'
-                },
-                body: JSON.stringify(dataToSend) // Converte o objeto para JSON
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Erro na resposta da API');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-
-                    // Faça algo com a resposta da API, se necessário
-                    if (data.AuthenticationResult.IdToken != null) {
-                        localStorage.setItem('token', data.AuthenticationResult.IdToken);
-                        router.push('/');
-                    }
-                    
-                })
-                .catch(error => {
-                    console.error('Erro ao fazer a solicitação POST:', error);
-                });
-
-        },
+        const redefinir = () => {
+            usuario.redefinir()
+        }
+  
+        return {
+            usuario,
+            erroNewPassword,
+            validateNewPassword,
+            validatePassword,
+            redefinir
+            
+        };
     },
 };
 </script>

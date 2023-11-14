@@ -1,15 +1,15 @@
 <template>
-    <div v-if="isLoading" class="loading"></div>
+    <div v-if="cota.isLoading" class="loading"></div>
 
     <div v-else>
         <nav class="navbar">
-            <div class="container-fluid" v-if="isMobile">
+            <div class="container-fluid" v-if="cota.isMobile">
                 <div class="col-12 d-flex">
                     <div class="col-6">
                         <a class="navbar-brand" href="#">
 
                             <div class="rounded-square">
-                                Olá {{ data.Nome }}
+                                Olá {{ cota.data.Nome }}
                             </div>
                         </a>
                     </div>
@@ -25,7 +25,7 @@
             <div class="container-fluid" v-else>
                 <a class="navbar-brand" href="#">
                     <div class="rounded-square">
-                        Olá {{ data.Nome }}
+                        Olá {{ cota.data.Nome }}
                     </div>
                 </a>
                 <a class="navbar-brand" href="#">
@@ -44,7 +44,7 @@
 
 
                 <div @click="openModalNotificacao" class="icon-container">
-                    <div class="notification-badge">{{ notification.Cota.length }}</div>
+                    <div class="notification-badge">{{ cota.notification.Cota.length }}</div>
                 </div>
 
                 <div class="nuvem">
@@ -86,7 +86,7 @@
                 </div>
                 <div class="d-flex m-3 justify-content-center" v-else>
                     <button type="button" @click="openModalAdquirir" class="btn btn-cota">Adquirir cota</button>
-                    <button type="button" @click="openModalPresentear" class="btn btn-cota">Presentear</button>
+                    <button type="button" @click="cota.openModalPresentear" class="btn btn-cota">Presentear</button>
 
                 </div>
 
@@ -111,19 +111,19 @@
 
                         <h5 class="text-center titulo-modal">Quem você quer presentear?</h5>
                         <div class="btn-number text-center">
-                            <p style="color: red" v-if="errors.nome">{{ errors.nome }}</p>
-                            <input type="text" class="input-text" placeholder="Informe o nome" v-model="enviar.nome">
-                            <p style="color: red" v-if="errors.email">{{ errors.email }}</p>
-                            <input type="email" class="input-text" placeholder="Informe o email" v-model="enviar.email">
+                            <p style="color: red" v-if="cota.errors.nome">{{ cota.errors.nome }}</p>
+                            <input type="text" class="input-text" placeholder="Informe o nome" v-model="cota.enviar.nome">
+                            <p style="color: red" v-if="cota.errors.email">{{ cota.errors.email }}</p>
+                            <input type="email" class="input-text" placeholder="Informe o email" v-model="cota.enviar.email">
 
                         </div>
                         <h5 class="text-center titulo-modal">Com quantas cotas você quer presentear?</h5>
                         <div class="btn-number text-center">
-                            <p style="color: red">{{ errors.cotas }}</p>
-                            <p style="color: red">{{ errors.cotasMin }}</p>
-                            <button type="button" @click="enviar.cotas--" class="btn btn-plus">-</button>
-                            <input type="number" class="input-number" v-model="enviar.cotas" min="0" max="10">
-                            <button type="button" @click="enviar.cotas++" class="btn btn-plus">+</button>
+                            <p style="color: red">{{ cota.errors.cotas }}</p>
+                            <p style="color: red">{{ cota.errors.cotasMin }}</p>
+                            <button type="button" @click="cota.enviar.cotas--" class="btn btn-plus">-</button>
+                            <input type="number" class="input-number" v-model="cota.enviar.cotas" min="0" max="10">
+                            <button type="button" @click="cota.enviar.cotas++" class="btn btn-plus">+</button>
                         </div>
                         <div class="text-center">
                             <button type="submit" class="btn btn-adquirir">Adquirir</button>
@@ -134,10 +134,10 @@
 
                 </div>
 
-                <div style="max-width: 80%; margin-left: 10%;" v-if="isMobile && showCardPresente">
+                <div style="max-width: 80%; margin-left: 10%;" v-if="isMobile && cota.showCardPresente">
                     <div style="background-color: #135b2d " class="card">
                         <div class="modal-body">
-                            <button type="button" class="btn btn-fechar" @click="showCardPresente = false">
+                            <button type="button" class="btn btn-fechar" @click="cota.showCardPresente = false">
                                 <span>&times;</span>
                             </button>
                             <h5 class="text-center titulo-modal">Seu presente foi enviado com sucesso</h5>
@@ -192,7 +192,7 @@
                     <div>
                         <div class="carousel">
                             <div class="carousel-inner">
-                                <div v-for="(item, index) in data.Projeto" :key="index" class="carousel-item"
+                                <div v-for="(item, index) in cota.data.Projeto" :key="index" class="carousel-item"
                                     :class="{ 'active': index === currentIndex }">
                                     <img :src="item.UrlImagem" alt="Slide Image">
                                     <div class="col-arvorometro col-12 mt-2">
@@ -215,199 +215,47 @@
         </div>
 
         <!-- Modal Adquirir Cota -->
-        <div class="modal" tabindex="-1" role="dialog" @click.stop
-            :class="{ 'show': showModalAdquirir, 'd-block': showModalAdquirir }">
-            <div class="modal-dialog" role="document">
-                <form @submit.prevent="submitAdquirir" class="modal-content">
-
-                    <div class="modal-body">
-                        <button type="button" class="btn" @click="closeModalAdquirir">
-                            <span>&times;</span>
-                        </button>
-                        <h5 class="text-center titulo-modal">Quantas cotas você quer adquirir?</h5>
-                        <div class="btn-number text-center">
-                            <p style="color: red" v-if="errors.cotaAquirir">{{ errors.cotaAquirir }}</p>
-                            <button type="button" @click="cotas--" class="btn btn-plus">-</button>
-                            <input type="number" class="input-number" v-model="cotas" min="0" max="10">
-                            <button type="button" @click="cotas++" class="btn btn-plus">+</button>
-                        </div>
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-adquirir">Adquirir</button>
-                        </div>
-
-
-                    </div>
-                </form>
-            </div>
-        </div>
+        
 
         <!-- Presente enviado com sucesso -->
-        <div class="modal" tabindex="-1" role="dialog" @click.stop
-            :class="{ 'show': showModalPresente, 'd-block': showModalPresente }">
-            <div class="modal-dialog" role="document">
-                <div style="background-color: #135b2d " class="modal-content">
-
-                    <div class="modal-body">
-                        <button type="button" class="btn btn-fechar" @click="closeModalPresente">
-                            <span>&times;</span>
-                        </button>
-                        <h5 class="text-center titulo-modal">Seu presente foi enviado com sucesso</h5>
-                        <div class="btn-number text-center">
-                            <p class="p-modal-presente">A pessoa terá <span>07 dias</span>para confirmar o recebimento no
-                                <br />
-                                email que enviamos. Caso contrário, devolvemos as cotas para sua conta.
-
-                            </p>
-                        </div>
-
-
-                    </div>
-                </div>
-            </div>
-        </div>
+        
 
 
         <!-- Modal Presentear -->
-        <div class="modal" tabindex="-1" role="dialog"
-            :class="{ 'show': showModalPresentear, 'd-block': showModalPresentear }">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <form @submit.prevent="submit" class="modal-body">
-                        <button type="button" class="btn" @click="closeModalPresentear">
-                            <span>&times;</span>
-                        </button>
-                        <h5 class="text-center titulo-modal">Quem você quer presentear?</h5>
-                        <div class="btn-number text-center">
-                            <p style="color: red" v-if="errors.nome">{{ errors.nome }}</p>
-                            <input type="text" class="input-text" placeholder="Informe o nome" v-model="enviar.nome">
-                            <p style="color: red" v-if="errors.email">{{ errors.email }}</p>
-                            <input type="email" class="input-text" placeholder="Informe o email" v-model="enviar.email">
-
-                        </div>
-                        <h5 class="text-center titulo-modal">Com quantas cotas você quer presentear?</h5>
-                        <div class="btn-number text-center">
-                            <p style="color: red">{{ errors.cotas }}</p>
-                            <p style="color: red">{{ errors.cotasMin }}</p>
-
-                            <button type="button" @click="enviar.cotas--" class="btn btn-plus">-</button>
-                            <input type="number" class="input-number" v-model="enviar.cotas" min="0" max="10">
-                            <button type="button" @click="enviar.cotas++" class="btn btn-plus">+</button>
-                        </div>
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-adquirir">Adquirir</button>
-                        </div>
-
-
-                    </form>
-                </div>
-            </div>
-        </div>
+        <modalPresentar/>
 
 
         <!-- Modal Notificacao -->
-        <div class="modal" tabindex="-1" role="dialog" :class="{ 'show': showNotificacao, 'd-block': showNotificacao }">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <form @submit.prevent="postAceitarNotificacao" class="modal-body">
-                        <button type="button" class="btn" @click="closeModalNotificacao">
-                            <span>&times;</span>
-                        </button>
-                        <h3 class="text-center titulo-modal">Suas notificaçãoes</h3>
-                        <div v-if="notification.Cota.length > 0" class="btn-number text-center">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Id</th>
-                                        <th scope="col">Mensagem</th>
-                                        <th scope="col">Ação</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(item, index) in notification.Cota" :key="item.id">
-                                        <th scope="row">{{ index }}</th>
-                                        <td>Você recebeu <b>{{ item.Quantidade }}</b> cotas de <b>{{ item.EmailOrigem }}</b>
-                                        </td>
-                                        <td>
-                                            <input type="hidden">
-                                            <input v-model="item.isChecked" @change="checkboxChanged(item)"
-                                                type="checkbox" />
-                                        </td>
-
-                                    </tr>
-
-                                </tbody>
-                            </table>
-
-                        </div>
-                        <h5 v-else class="text-center titulo-modal">Você não possui nenhuma notificação</h5>
-
-
-                        <div class="text-right">
-                            <button type="submit" class="btn btn-adquirir">Aceitar todos</button>
-                        </div>
-
-
-                    </form>
-                </div>
-            </div>
-        </div>
+        
 
     </div>
 </template>
   
 <script>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import {  computed, onMounted, onBeforeUnmount } from 'vue';
 import { useToast } from "vue-toastification";
-import router from '@/router';
-
+import { useCotaStore } from "@/stores/CotaStore";
+import modalPresentar from '@/components/modal/modalPresentar.vue'
 export default {
     name: 'HomeView',
     setup() {
+
+        
         const toast = useToast();
 
-        const isLoading = ref(true);
-        const data = ref({});
-        const isMobile = ref(false);
-        const showCardAdquirir = ref(false);
-        const showModalAdquirir = ref(false);
-        const showModalPresentear = ref(false);
-        const showModalPresente = ref(false);
-        const showCardPresente = ref(false);
-        const showCardPresentear = ref(false);
-        const isToastVisible = ref(true);
-        const showNotificacao = ref(false);
-        const cotas = ref(0);
-        const enviar = ref({
-            nome: '',
-            email: '',
-            cotas: 0,
-
-        });
-        const errors = ref({
-            nome: '',
-            email: '',
-            cotas: '',
-            cotaAquirir: '',
-            cotasMin: ''
-        });
-        const notification = ref({
-            Cota: {
-                isChecked: false
-            }
-        });
-        const currentIndex = ref(0);
+        const cota = useCotaStore();
 
 
 
         const arvorePlantada = computed(() => {
-            const resultado = data.value.QuantidadeCotas / 20;
+            const resultado = cota.data.QuantidadeCotas / 20;
             return Math.trunc(resultado);
         });
 
-        const folhasCota = computed(() => data.value.QuantidadeCotas % 20);
+        const folhasCota = computed(() => cota.data.QuantidadeCotas % 20);
 
         const checkIfMobile = () => {
-            isMobile.value = window.innerWidth <= 768;
+            cota.isMobile = window.innerWidth <= 768;
         };
 
         const checkboxChanged = (item) => {
@@ -418,50 +266,41 @@ export default {
 
 
         const openModalAdquirir = () => {
-            showModalAdquirir.value = true;
+            cota.showModalAdquirir = true;
             document.body.classList.add('modal-open');
         };
 
         const closeModalAdquirir = () => {
-            showModalAdquirir.value = false;
+            cota.showModalAdquirir = false;
             document.body.classList.remove('modal-open');
         };
 
-        const openModalPresente = () => {
-            showModalPresente.value = true;
-            document.body.classList.add('modal-open');
-        };
+        
 
         const closeModalPresente = () => {
-            showModalPresente.value = false;
+            cota.showModalPresente = false;
             document.body.classList.remove('modal-open');
         };
 
-        const openModalPresentear = () => {
-            showModalPresentear.value = true;
-            document.body.classList.add('modal-open');
-        };
+       
 
-        const closeModalPresentear = () => {
-            showModalPresentear.value = false;
-            document.body.classList.remove('modal-open');
-        };
+        
         const openModalNotificacao = () => {
-            showNotificacao.value = true;
+            cota.showNotificacao = true;
             document.body.classList.add('modal-open');
         };
 
         const closeModalNotificacao = () => {
-            showNotificacao.value = false;
+            cota.showNotificacao = false;
             document.body.classList.remove('modal-open');
         };
 
         const nextSlide = () => {
-            currentIndex.value = (currentIndex.value + 1) % data.value.Projeto.length;
+            cota.currentIndex = (cota.currentIndex + 1) % cota.data.Projeto.length;
         };
 
         const prevSlide = () => {
-            currentIndex.value = (currentIndex.value - 1 + data.value.Projeto.length) % data.value.Projeto.length;
+            cota.currentIndex = (cota.currentIndex - 1 + cota.data.Projeto.length) % cota.data.Projeto.length;
         };
 
 
@@ -469,167 +308,20 @@ export default {
         onMounted(() => {
             window.addEventListener('resize', checkIfMobile);
             checkIfMobile();
-            getUser();
-            getPresente();
+            cota.getUser();
+            cota.getPresente();
         });
 
         onBeforeUnmount(() => {
             window.removeEventListener('resize', checkIfMobile);
         });
 
-        const getUser = () => {
-            const apiUrl = 'https://api.passagemverde.com.br/user';
 
-
-            fetch(apiUrl, {
-                method: 'GET',
-                headers: {
-                    'AuthToken': localStorage.getItem('token'),
-                },
-            })
-                .then((response) => {
-                    console.log('response', response)
-                    if (response.status == 401) {
-                        return router.push("/login")
-                    }
-                    if (!response.ok) {
-                        throw new Error('Erro na resposta da API');
-                    }
-
-                    return response.json();
-                })
-                .then((responseData) => {
-                    console.log(responseData)
-                    isLoading.value = false;
-                    data.value = responseData;
-                })
-                .catch((error) => {
-                    console.error('Erro ao fazer a solicitação GET:', error);
-
-                    isLoading.value = false;
-                });
-        };
-
-        const getPresente = () => {
-            const apiUrl = 'https://api.passagemverde.com.br/transfer';
-
-            fetch(apiUrl, {
-                method: 'GET',
-                headers: {
-                    'AuthToken': localStorage.getItem('token'),
-                },
-            })
-                .then((response) => {
-                    if (response.status == 401) {
-                        return router.push("/login")
-                    }
-
-                    if (!response.ok) {
-                        throw new Error('Erro na resposta da API');
-                    }
-
-                    return response.json();
-                })
-                .then((responseData) => {
-                    isLoading.value = false;
-                    notification.value = responseData;
-                })
-                .catch((error) => {
-                    console.error('Erro ao fazer a solicitação GET:', error);
-                });
-        };
-
-        const postPresente = () => {
-            const apiUrl = 'https://api.passagemverde.com.br/transfer';
-
-            const dataToSend = {
-                emailDestino: enviar.value.email,
-                quantidade: enviar.value.cotas,
-                nome: enviar.value.nome
-            }
-
-            fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'AuthToken': localStorage.getItem('token'),
-                },
-                body: JSON.stringify(dataToSend)
-            })
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error('Erro na resposta da API');
-                    }
-                    return response.json();
-                })
-                .then((responseData) => {
-                    console.log(responseData);
-                })
-                .catch((error) => {
-                    console.error('Erro ao fazer a solicitação GET:', error);
-                });
-        };
-
-
-        const postAceitarNotificacao = () => {
-            const apiUrl = 'https://api.passagemverde.com.br/transfer/accepted';
-
-            const checkedItems = notification.value.Cota.filter(item => item.isChecked);
-
-            const dataToSend = {
-                Operacao: "resgate",
-                TransferenciaKey: checkedItems.map(item => ({ ChaveResgate: item.ChaveResgate })),
-            }
-
-            fetch(apiUrl, {
-                method: 'POST',
-                body: JSON.stringify(dataToSend)
-            })
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error('Erro na resposta da API');
-                    }
-                    return response.json();
-                })
-                .then((responseData) => {
-                    console.log(responseData);
-                })
-                .catch((error) => {
-                    console.error('Erro ao fazer a solicitação POST:', error);
-                });
-        };
-
-
-
-
-        const submit = () => {
-            if (enviar.value.nome !== '' && enviar.value.email !== '' && enviar.value.cotas !== 0 && enviar.value.cotas >= 1) {
-                if (this.isMobile) {
-                    showCardPresentear.value = false;
-                    showCardPresente.value = true;
-                    postPresente()
-                } else {
-                    closeModalPresentear();
-                    openModalPresente();
-                }
-            } else {
-                if (enviar.value.nome === '') {
-                    errors.value.nome = 'O campo nome não pode estar vazio';
-                }
-                if (enviar.value.email === '') {
-                    errors.value.email = 'O campo email não pode estar vazio';
-                }
-                if (enviar.value.cotas === 0) {
-                    errors.value.cotas = 'O campo nome não pode estar igual a zero';
-                }
-                if (enviar.value.cotas <= 1) {
-                    errors.value.cotasMin = 'A quantidade de cotas não pode ser menor que 0';
-                }
-            }
-        };
+        
 
         const submitAdquirir = () => {
-            if (cotas.value === 0) {
-                errors.value.cotaAquirir = 'O valor da cota não pode ser igual a zero';
+            if (cota.cotas === 0) {
+                cota.errors.cotaAquirir = 'O valor da cota não pode ser igual a zero';
             } else {
                 closeModalAdquirir();
                 console.log('Cotas adquiridas com sucesso');
@@ -638,59 +330,38 @@ export default {
 
 
         const showCardAdquirirMobile = () => {
-            showCardAdquirir.value = true;
-            if (showCardPresentear.value) {
-                showCardPresentear.value = false;
+            cota.showCardAdquirir = true;
+            if (cota.showCardPresentear) {
+                cota.showCardPresentear = false;
             }
         };
 
         const showCardPresentearMobile = () => {
-            showCardPresentear.value = true;
-            if (showCardAdquirir.value) {
-                showCardAdquirir.value = false;
+            cota.showCardPresentear = true;
+            if (cota.showCardAdquirir) {
+                cota.showCardAdquirir = false;
             }
         };
 
 
 
         return {
+            modalPresentar,
             toast,
-            isLoading,
-            data,
-            isMobile,
-            showCardAdquirir,
-            showModalAdquirir,
-            showModalPresentear,
-            showModalPresente,
-            showCardPresente,
-            showCardPresentear,
-            isToastVisible,
-            cotas,
-            enviar,
-            errors,
-            currentIndex,
-            showNotificacao,
-            notification,
+            cota,
             arvorePlantada,
             folhasCota,
             checkIfMobile,
             openModalAdquirir,
             closeModalAdquirir,
-            openModalPresente,
             closeModalPresente,
-            openModalPresentear,
-            closeModalPresentear,
             nextSlide,
             prevSlide,
-            getUser,
-            getPresente,
-            submit,
             submitAdquirir,
             showCardAdquirirMobile,
             showCardPresentearMobile,
             openModalNotificacao,
             closeModalNotificacao,
-            postAceitarNotificacao,
             checkboxChanged,
         };
     },
