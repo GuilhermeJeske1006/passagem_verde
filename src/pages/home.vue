@@ -55,27 +55,27 @@
                     </div>
                 </div>
                 <figure class="arvore">
-                    <img v-if="folhasCota == 20" src="@/assets/folhas/Árvore20.png" class="img-fluid img-arvore" alt="">
-                    <img v-if="folhasCota == 19" src="@/assets/folhas/Árvore19.png" class="img-fluid img-arvore" alt="">
-                    <img v-if="folhasCota == 18" src="@/assets/folhas/Árvore18.png" class="img-fluid img-arvore" alt="">
-                    <img v-if="folhasCota == 17" src="@/assets/folhas/Árvore17.png" class="img-fluid img-arvore" alt="">
-                    <img v-if="folhasCota == 16" src="@/assets/folhas/Árvore16.png" class="img-fluid img-arvore" alt="">
-                    <img v-if="folhasCota == 15" src="@/assets/folhas/Árvore15.png" class="img-fluid img-arvore" alt="">
-                    <img v-if="folhasCota == 14" src="@/assets/folhas/Árvore14.png" class="img-fluid img-arvore" alt="">
-                    <img v-if="folhasCota == 13" src="@/assets/folhas/Árvore13.png" class="img-fluid img-arvore" alt="">
-                    <img v-if="folhasCota == 12" src="@/assets/folhas/Árvore12.png" class="img-fluid img-arvore" alt="">
-                    <img v-if="folhasCota == 11" src="@/assets/folhas/Árvore11.png" class="img-fluid img-arvore" alt="">
-                    <img v-if="folhasCota == 10" src="@/assets/folhas/Árvore10.png" class="img-fluid img-arvore" alt="">
-                    <img v-if="folhasCota == 9" src="@/assets/folhas/Árvore9.png" class="img-fluid img-arvore" alt="">
-                    <img v-if="folhasCota == 8" src="@/assets/folhas/Árvore8.png" class="img-fluid img-arvore" alt="">
-                    <img v-if="folhasCota == 7" src="@/assets/folhas/Árvore7.png" class="img-fluid img-arvore" alt="">
-                    <img v-if="folhasCota == 6" src="@/assets/folhas/Árvore6.png" class="img-fluid img-arvore" alt="">
-                    <img v-if="folhasCota == 5" src="@/assets/folhas/Árvore5.png" class="img-fluid img-arvore" alt="">
-                    <img v-if="folhasCota == 4" src="@/assets/folhas/Árvore4.png" class="img-fluid img-arvore" alt="">
-                    <img v-if="folhasCota == 3" src="@/assets/folhas/Árvore3.png" class="img-fluid img-arvore" alt="">
-                    <img v-if="folhasCota == 2" src="@/assets/folhas/Árvore2.png" class="img-fluid img-arvore" alt="">
-                    <img v-if="folhasCota == 1" src="@/assets/folhas/Árvore1.png" class="img-fluid img-arvore" alt="">
-                    <img v-if="folhasCota == 0" src="@/assets/folhas/Árvore0.png" class="img-fluid img-arvore" alt="">
+                    <img v-if="folhasCota == 20" src="@/assets/folhas/arvore20.png" class="img-fluid img-arvore" alt="">
+                    <img v-if="folhasCota == 19" src="@/assets/folhas/arvore19.png" class="img-fluid img-arvore" alt="">
+                    <img v-if="folhasCota == 18" src="@/assets/folhas/arvore18.png" class="img-fluid img-arvore" alt="">
+                    <img v-if="folhasCota == 17" src="@/assets/folhas/arvore17.png" class="img-fluid img-arvore" alt="">
+                    <img v-if="folhasCota == 16" src="@/assets/folhas/arvore16.png" class="img-fluid img-arvore" alt="">
+                    <img v-if="folhasCota == 15" src="@/assets/folhas/arvore15.png" class="img-fluid img-arvore" alt="">
+                    <img v-if="folhasCota == 14" src="@/assets/folhas/arvore14.png" class="img-fluid img-arvore" alt="">
+                    <img v-if="folhasCota == 13" src="@/assets/folhas/arvore13.png" class="img-fluid img-arvore" alt="">
+                    <img v-if="folhasCota == 12" src="@/assets/folhas/arvore12.png" class="img-fluid img-arvore" alt="">
+                    <img v-if="folhasCota == 11" src="@/assets/folhas/arvore11.png" class="img-fluid img-arvore" alt="">
+                    <img v-if="folhasCota == 10" src="@/assets/folhas/arvore10.png" class="img-fluid img-arvore" alt="">
+                    <img v-if="folhasCota == 9" src="@/assets/folhas/arvore9.png" class="img-fluid img-arvore" alt="">
+                    <img v-if="folhasCota == 8" src="@/assets/folhas/arvore8.png" class="img-fluid img-arvore" alt="">
+                    <img v-if="folhasCota == 7" src="@/assets/folhas/arvore7.png" class="img-fluid img-arvore" alt="">
+                    <img v-if="folhasCota == 6" src="@/assets/folhas/arvore6.png" class="img-fluid img-arvore" alt="">
+                    <img v-if="folhasCota == 5" src="@/assets/folhas/arvore5.png" class="img-fluid img-arvore" alt="">
+                    <img v-if="folhasCota == 4" src="@/assets/folhas/arvore4.png" class="img-fluid img-arvore" alt="">
+                    <img v-if="folhasCota == 3" src="@/assets/folhas/arvore3.png" class="img-fluid img-arvore" alt="">
+                    <img v-if="folhasCota == 2" src="@/assets/folhas/arvore2.png" class="img-fluid img-arvore" alt="">
+                    <img v-if="folhasCota == 1" src="@/assets/folhas/arvore1.png" class="img-fluid img-arvore" alt="">
+                    <img v-if="folhasCota == 0" src="@/assets/folhas/arvore0.png" class="img-fluid img-arvore" alt="">
 
                     <h4 class="h4-arvore">{{ folhasCota }} cotas</h4>
                 </figure>
@@ -478,7 +478,7 @@ export default {
         });
 
         const getUser = () => {
-            const apiUrl = 'https://7fhxhtheo0.execute-api.us-east-1.amazonaws.com/action-neutralizacarbon/user';
+            const apiUrl = 'https://api.passagemverde.com.br/user';
 
 
             fetch(apiUrl, {
@@ -488,6 +488,7 @@ export default {
                 },
             })
                 .then((response) => {
+                    console.log('response', response)
                     if (response.status == 401) {
                         return router.push("/login")
                     }
@@ -498,17 +499,19 @@ export default {
                     return response.json();
                 })
                 .then((responseData) => {
+                    console.log(responseData)
                     isLoading.value = false;
                     data.value = responseData;
                 })
                 .catch((error) => {
                     console.error('Erro ao fazer a solicitação GET:', error);
+
                     isLoading.value = false;
                 });
         };
 
         const getPresente = () => {
-            const apiUrl = 'https://7fhxhtheo0.execute-api.us-east-1.amazonaws.com/action-neutralizacarbon/transfer';
+            const apiUrl = 'https://api.passagemverde.com.br/transfer';
 
             fetch(apiUrl, {
                 method: 'GET',
@@ -537,7 +540,7 @@ export default {
         };
 
         const postPresente = () => {
-            const apiUrl = 'https://7fhxhtheo0.execute-api.us-east-1.amazonaws.com/action-neutralizacarbon/transfer';
+            const apiUrl = 'https://api.passagemverde.com.br/transfer';
 
             const dataToSend = {
                 emailDestino: enviar.value.email,
@@ -568,7 +571,7 @@ export default {
 
 
         const postAceitarNotificacao = () => {
-            const apiUrl = 'https://7fhxhtheo0.execute-api.us-east-1.amazonaws.com/action-neutralizacarbon/transfer/accepted';
+            const apiUrl = 'https://api.passagemverde.com.br/transfer/accepted';
 
             const checkedItems = notification.value.Cota.filter(item => item.isChecked);
 
@@ -599,7 +602,7 @@ export default {
 
 
         const submit = () => {
-            if (enviar.value.nome !== '' && enviar.value.email !== '' && enviar.value.cotas !== 0 && enviar.value.cotas <= 1) {
+            if (enviar.value.nome !== '' && enviar.value.email !== '' && enviar.value.cotas !== 0 && enviar.value.cotas >= 1) {
                 if (this.isMobile) {
                     showCardPresentear.value = false;
                     showCardPresente.value = true;
@@ -618,7 +621,7 @@ export default {
                 if (enviar.value.cotas === 0) {
                     errors.value.cotas = 'O campo nome não pode estar igual a zero';
                 }
-                if (enviar.value.cotas >= 1) {
+                if (enviar.value.cotas <= 1) {
                     errors.value.cotasMin = 'A quantidade de cotas não pode ser menor que 0';
                 }
             }
