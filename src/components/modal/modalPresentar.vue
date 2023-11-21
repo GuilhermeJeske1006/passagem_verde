@@ -1,58 +1,64 @@
 <template>
     <div class="modal" tabindex="-1" role="dialog"
-            :class="{ 'show': cota.showModalPresentear, 'd-block': cota.showModalPresentear }">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <form @submit.prevent="submit" class="modal-body">
-                        <button type="button" class="btn" @click="cota.closeModalPresentear">
-                            <span>&times;</span>
-                        </button>
-                        <h5 class="text-center titulo-modal">Quem você quer presentear?</h5>
-                        <div class="btn-number text-center">
-                            <p style="color: red" v-if="cota.errors.nome">{{ cota.errors.nome }}</p>
-                            <input type="text" class="input-text" placeholder="Informe o nome" v-model="cota.enviar.nome">
-                            <p style="color: red" v-if="cota.errors.email">{{ cota.errors.email }}</p>
-                            <input type="email" class="input-text" placeholder="Informe o email" v-model="cota.enviar.email">
-
+        :class="{ 'show': cota.showModalPresentear, 'd-block': cota.showModalPresentear }">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form @submit.prevent="submit" class="modal-body">
+                    <button type="button" class="btn" @click="closeModalPresentear">
+                        <span>&times;</span>
+                    </button>
+                    <h5 class="text-center titulo-modal">Quem você quer presentear?</h5>
+                    <div class="btn-number text-center">
+                        <p style="color: red" v-if="cota.errors.nome">{{ cota.errors.nome }}</p>
+                        <div class="wrap-input100 validate-input">
+                            <input class="input100" placeholder="Informe o nome" v-model="cota.enviar.nome" type="text">
+                            <span class="focus-input100"></span>
+                            <span class="symbol-input100">
+                                <i class="fa fa-user-circle" aria-hidden="true"></i>
+                            </span>
                         </div>
-                        <h5 class="text-center titulo-modal">Com quantas cotas você quer presentear?</h5>
-                        <div class="btn-number text-center">
-                            <p style="color: red">{{ cota.errors.cotas }}</p>
-                            <p style="color: red">{{ cota.errors.cotasMin }}</p>
-
-                            <button type="button" @click="cota.enviar.cotas--" class="btn btn-plus">-</button>
-                            <input type="number" class="input-number" v-model="enviar.cotas" min="0" max="10">
-                            <button type="button" @click="cota.enviar.cotas++" class="btn btn-plus">+</button>
+                        <p style="color: red" v-if="cota.errors.email">{{ cota.errors.email }}</p>
+                        <div class="wrap-input100 validate-input" data-validate="Password is required">
+                            <input class="input100" placeholder="Informe o email" v-model="cota.enviar.email" type="email">
+                            <span class="focus-input100"></span>
+                            <span class="symbol-input100">
+                                <i class="fa fa-envelope" aria-hidden="true"></i>
+                            </span>
                         </div>
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-adquirir">Adquirir</button>
-                        </div>
+                    </div>
+                    <h5 class="text-center titulo-modal">Com quantas cotas você quer presentear?</h5>
+                    <div class="btn-number text-center">
+                        <p style="color: red">{{ cota.errors.cotas }}</p>
+                        <p style="color: red">{{ cota.errors.cotasMin }}</p>
+
+                        <button type="button" @click="cota.enviar.cotas--" class="btn btn-plus">-</button>
+                        <input type="number" class="input-number" v-model="cota.enviar.cotas" min="0" max="10">
+                        <button type="button" @click="cota.enviar.cotas++" class="btn btn-plus">+</button>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-adquirir">Presentar</button>
+                    </div>
 
 
-                    </form>
-                </div>
+                </form>
             </div>
         </div>
+    </div>
 </template>
 
 <script>
 import { useCotaStore } from "@/stores/CotaStore";
 
-
 export default {
-        setup(){
-            const cota = useCotaStore()
+    setup() {
+        const cota = useCotaStore()
 
-            const submit = () => {
+
+
+        const submit = () => {
             if (cota.enviar.nome !== '' && cota.enviar.email !== '' && cota.enviar.cotas !== 0 && cota.enviar.cotas >= 1) {
-                if (this.isMobile) {
-                    cota.showCardPresentear = false;
-                    cota.showCardPresente = true;
-                    cota.postPresente()
-                } else {
-                    closeModalPresentear();
-                    openModalPresente();
-                }
+                closeModalPresentear();
+                openModalPresente();
             } else {
                 if (cota.enviar.nome === '') {
                     cota.errors.nome = 'O campo nome não pode estar vazio';
@@ -78,12 +84,12 @@ export default {
             cota.showModalPresente = true;
             document.body.classList.add('modal-open');
         };
-            return {
-                closeModalPresentear,
-                openModalPresente,
-                cota,
-                submit,
-            }
+        return {
+            cota,
+            openModalPresente,
+            closeModalPresentear,
+            submit
         }
-    }
+    },
+}
 </script>

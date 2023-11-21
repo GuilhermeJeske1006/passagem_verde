@@ -66,10 +66,10 @@
           </div>
 
           <div class="text-center p-t-136">
-            <!-- <a class="txt2" href="#">
-							Create your Account
+            <a class="txt2" href="/register">
+							Cria a sua conta
 							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
-						</a> -->
+						</a>
           </div>
         </form>
       </div>
@@ -84,6 +84,7 @@ import { ref } from "vue";
 export default {
   name: "LoginView",
   setup() {
+    
     const usuario = useUsuarioStore();
 
     const errors = ref({

@@ -18,6 +18,7 @@
 
     .btn-cota {
         padding: 10px 2rem 10px 2rem !important;
+        font-size: 13px !important;
     }
 
     .btn-confira {
@@ -30,13 +31,9 @@
 
     .p-nome-projeto {
         font-size: 7px !important;
-        color: #147933 !important;
     }
 
-    .h4-nome-projeto {
-        color: #147933 !important;
-        font-size: 10px !important;
-    }
+
 
     .image_nome {
         width: 35% !important;
@@ -46,9 +43,7 @@
         left: 11% !important;
     }
 
-    .col-arvorometro {
-        background: #f7f7f7 !important;
-    }
+
 
     .btn-arvorometro {
         margin: 0px 9px 2px 9px !important;
@@ -78,7 +73,38 @@
         font-size: 10px !important;
     }
 
-    .btn-confira {}
+    .speech-bubble {
+        padding: 10px 3px 6px 19px !important;
+        max-width: 80% !important;
+
+    }
+
+    .speech-bubble>p {
+        font-size: 10px !important;
+        letter-spacing: 0px !important;
+        line-height: 16px !important;
+    }
+
+    .speech-bubble>p>span {
+        font-size: 10px !important;
+
+    }
+
+    .speech-bubble::before {
+        right: 89% !important;
+        top: 50px !important;
+    
+    } 
+
+    .speech-bubble-2>p {
+        font-size: 10px !important;
+
+    }
+
+    .speech-bubble-2>p>span {
+        font-size: 10px !important;
+
+    }
 }
 
 .image-nuvem {
@@ -107,7 +133,7 @@
     font-size: 15px;
     font-style: normal;
     font-weight: 700;
-    text-decoration-line: underline;
+    font-weight: bold;
 }
 
 .btn-plus {
@@ -123,7 +149,7 @@
 
 .col-arvorometro {
     background: #135b2d;
-    height: auto;
+    height: 100vh;
 }
 
 .col-map {
@@ -141,14 +167,16 @@
 .btn-confira {
     background: #e3de3a;
     border-radius: 20px;
-    margin: 5px 5px 5px 5px;
-    padding: 10px 4rem 10px 4rem;
+    margin: 0px 5px 24px 5px;
+    padding: 4px 3rem 4px 3rem;
     color: #382D1D;
-    font-family: 'Montserrat', sans-serif;
     font-size: 15px;
     font-style: normal;
     font-weight: 700;
-    text-decoration-line: underline;
+    letter-spacing: 0px;
+    line-height: 29px;
+    text-decoration: underline;
+    font-family: "Montserrat";
 }
 
 .input-text {
@@ -170,15 +198,15 @@
 
 .btn-cota {
     background: #e3de3a;
-    border-radius: 20px;
-    margin: 5px 5px 5px 5px;
-    padding: 10px 4rem 10px 4rem;
+    border-radius: 25px;
+    margin: 5px 9px 5px 10px;
+    padding: 12px 5rem 12px 5rem;
     color: #382D1D;
     font-family: 'Montserrat', sans-serif;
     font-size: 15px;
     font-style: normal;
     font-weight: 700;
-    text-decoration-line: underline;
+    text-align: center;
 }
 
 #circulo {
@@ -227,7 +255,7 @@
     margin: 10px;
     color: #147933;
     font-family: 'Montserrat', sans-serif;
-    font-size: 28px;
+    font-size: 35px;
     font-style: normal;
     font-weight: 700;
 }
@@ -348,7 +376,7 @@
 
 .img-arvore {
     max-width: 50%;
-    max-height: 50%;
+    max-height: 100%;
 }
 
 .img-folha01 {}
@@ -359,6 +387,8 @@
     position: relative;
     overflow: hidden;
     width: 100%;
+    
+    
 }
 
 .carousel-inner {
@@ -408,18 +438,31 @@
 .speech-bubble {
     position: relative;
     background-color: #147933;
-    border-radius: 15px;
-    padding: 20px;
-    max-width: 300px;
+    border-radius: 39px;
+    padding: 10px 3px 6px 32px;
+    max-width: 70%;
     text-align: center;
-    margin-bottom: 15%;
+    margin-bottom: 8%;
 }
 
+/* .p-speech {
+    font-size: 18px;
+letter-spacing: 0px;
+line-height: 22px;
+color: #ffffff;
+font-weight: 500;
+font-family: "Montserrat";
+text-align: start;
+} */
+
 .speech-bubble>p {
-    color: #fff;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0px;
+    line-height: 22px;
+    color: #ffffff;
+    font-weight: 500;
+    font-family: "Montserrat";
+    text-align: start;
 }
 
 .speech-bubble>p>span {
@@ -433,44 +476,45 @@
     content: "";
     position: absolute;
     border-style: solid;
-    border-width: 10px 15px 10px 0;
+    border-width: 11px 33px 8px 0;
     border-color: transparent #147933 transparent transparent;
-    right: 100%;
-    top: 57px;
-
+    right: 95%;
+    top: 59px;
+    transform: rotate(-31deg);
 }
 
 .speech-bubble-2 {
     position: relative;
     background-color: #fff;
-    border-radius: 15px;
-    padding: 20px;
-    max-width: 300px;
-    text-align: center;
+    border-radius: 50px;
+    padding: 13px 9px 12px 27px;
+    max-width: 94%;
+    text-align: start;
 }
 
 .speech-bubble-2>p {
     color: #47793C;
     font-family: 'Montserrat', sans-serif;
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 600;
 }
 
 .speech-bubble-2>p>span {
     color: #47793C;
     font-family: 'Montserrat', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: bold;
 }
 
 .speech-bubble-2::before {
     content: "";
     position: absolute;
     border-style: solid;
-    border-width: 10px 15px 10px 0;
+    border-width: 11px 33px 10px 0;
     border-color: transparent #fff transparent transparent;
-    right: 100%;
-    top: 57px;
+    right: 96%;
+    top: 62px;
+    transform: rotate(-19deg);
 
 }
 
@@ -494,3 +538,66 @@
     top: 0;
     left: 7%;
 }
+
+.number-cota {
+    font-family: Poppins-Bold;
+        font-size: 43px;
+        color: #333333;
+        line-height: 1.2;
+        text-align: center;
+        width: 100%;
+        display: block;
+    }
+
+    .p-numer-cota {
+
+        font-size: 13px;
+        color: #666666;
+        line-height: 1.2;
+        text-align: center;
+    
+    }
+
+    .subtitle {
+        font-family: ui-monospace;
+        font-size: 16px;
+        color: #333333;
+        line-height: 1.2;
+        text-align: end;
+        width: 100%;
+        display: block;
+        padding-top: 0 !important;
+    }
+
+
+    
+    .icon-container {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        background-color: #135b2d;
+        border-radius: 50%;
+        left: 0;
+        top: 16%;
+    }
+.notification-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #e74c3c;
+    /* Cor de fundo do número de notificações */
+    color: #fff;
+    /* Cor do texto */
+    border-radius: 50%;
+    /* Formato de círculo */
+    width: 20px;
+    /* Largura do número */
+    height: 20px;
+    /* Altura do número */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    /* Tamanho da fonte do número */
+}
+

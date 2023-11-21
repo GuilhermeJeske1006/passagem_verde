@@ -154,6 +154,7 @@ iframe {
 .limiter {
   width: 100%;
   margin: 0 auto;
+  z-index: 999;
 }
 
 .container-login100 {
@@ -198,6 +199,14 @@ iframe {
 }
 
 .login100-pic img {
+  max-width: 100%;
+}
+
+.login100-pic2 {
+  width: 316px;
+}
+
+.login100-pic2 img {
   max-width: 100%;
 }
 
