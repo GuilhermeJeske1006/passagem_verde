@@ -63,6 +63,7 @@ export const useUsuarioStore = defineStore("usuario", {
             );
           } else {
             localStorage.setItem("session", data.Session);
+            localStorage.setItem("username", this.username);
             router.push("/redefinir");
           }
           console.log("Resposta da API:", data);
@@ -90,7 +91,7 @@ export const useUsuarioStore = defineStore("usuario", {
       const dataToSend = {
         ChallengeName: "NEW_PASSWORD_REQUIRED",
         ChallengeResponses: {
-          USERNAME: this.username,
+          USERNAME: localStorage.getItem("username"),
           NEW_PASSWORD: this.repeteSenha,
         },
         ClientId: "2ba84o1sr4kpn5ucbvgg6sm40o",
@@ -135,7 +136,6 @@ export const useUsuarioStore = defineStore("usuario", {
 
       const dataToSend = {
         email: this.cadastro.email,
-        password: this.cadastro.password,
         name: this.cadastro.nome,
         last_name: this.cadastro.sobrenome,
         whatsapp: this.cadastro.whatsapp,

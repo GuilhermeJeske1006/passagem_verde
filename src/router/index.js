@@ -6,7 +6,7 @@ import RedefinirView from '../pages/redefinir.vue';
 import authMiddleware from '@/middleware/authMiddleware'; // Importe o middleware
 import TelaView from '../pages/tela.vue';
 
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 
 const routes = [
   { path: '/', component: HomeView, beforeEnter: authMiddleware, },
@@ -17,10 +17,10 @@ const routes = [
   { path: '/tela', component: TelaView },
 
 
-]
+];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes, 
 })
 

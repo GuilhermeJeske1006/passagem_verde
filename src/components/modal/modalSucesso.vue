@@ -10,7 +10,7 @@
                     </button>
                     <h5 class="text-center titulo-modal">Seu presente foi enviado com sucesso</h5>
                     <div class="btn-number text-center">
-                        <p class="p-modal-presente">A pessoa terá <span>07 dias</span>para confirmar o recebimento no
+                        <p class="p-modal-presente">A pessoa terá <span>07 dias</span> para confirmar o recebimento no
                             <br />
                             email que enviamos. Caso contrário, devolvemos as cotas para sua conta.
 

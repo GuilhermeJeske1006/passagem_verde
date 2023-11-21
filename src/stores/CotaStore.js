@@ -63,6 +63,7 @@ export const useCotaStore = defineStore("cota", {
         cotaAquirir: "",
         cotasMin: "",
         metodoPreencher: "",
+        faltaCota: ''
       },
       notification: {
         Cota: {
@@ -86,6 +87,7 @@ export const useCotaStore = defineStore("cota", {
       })
         .then((response) => {
           if (response.status == 401) {
+            location.reload();
             return router.push("/login");
           }
           if (!response.ok) {
@@ -220,22 +222,25 @@ export const useCotaStore = defineStore("cota", {
 
       this.isLoading = true
 
+      const cpfSemPontuacao = this.credito.cpf.replace(/\D/g, '');
+
+
       const data = {
         typePayment: "card",
         quantidade: this.cotas,
         paymentDetails: {
           payment_token: this.credito.payment_token,
           card_mask: this.credito.card_mask,
-          cpf: this.credito.cpf,
+          cpf: cpfSemPontuacao,
           name: this.credito.nome
         },
       };
 
       fetch(apiUrl, {
         method: "POST",
-        // headers: {
-        //   AuthToken: localStorage.getItem("token"),
-        // },
+        headers: {
+          AuthToken: localStorage.getItem("token"),
+        },
         body: JSON.stringify(data),
       })
         .then((response) => {
@@ -244,13 +249,12 @@ export const useCotaStore = defineStore("cota", {
           }
           return response.json();
         })
-        .then((responseData) => {
+        .then(() => {
+          this.closeModalCredito()
           useToast().success("Pagamento feito com sucesso!");
-          console.log(responseData);
         })
-        .catch((error) => {
+        .catch(() => {
           useToast().error("Erro ao Fazer o pagamento");
-          console.error("Erro ao fazer a solicitação POST:", error);
         })
         .finally(() => {
           this.isLoading = false;
@@ -269,9 +273,9 @@ export const useCotaStore = defineStore("cota", {
 
       fetch(apiUrl, {
         method: "POST",
-        // headers: {
-        //   AuthToken: localStorage.getItem("token"),
-        // },
+        headers: {
+          AuthToken: localStorage.getItem("token"),
+        },
         body: JSON.stringify(data),
       })
         .then((response) => {
@@ -282,16 +286,28 @@ export const useCotaStore = defineStore("cota", {
         })
         .then((responseData) => {
             this.pix = responseData
-          console.log(responseData);
         })
-        .catch((error) => {
+        .catch(() => {
           useToast().error("Erro ao solicitar o pix! Tente novamente!");
-          console.error("Erro ao fazer a solicitação POST:", error);
         })
         .finally(() => {
           this.isLoading = false;
         })
     },
+
+      closeModalAdquirir () {
+            this.showModalAdquirir = false
+            this.metodo.credito = false
+            this.metodo.pix = false
+            document.body.classList.remove('modal-open');
+        },
+
+       closeModalCredito () {
+            this.showCardCredito = false
+            this.closeModalAdquirir()
+            document.body.classList.remove('modal-open');
+
+        },
   },
 
   getters: {},

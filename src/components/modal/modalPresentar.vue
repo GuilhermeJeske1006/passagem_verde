@@ -30,6 +30,7 @@
                     <div class="btn-number text-center">
                         <p style="color: red">{{ cota.errors.cotas }}</p>
                         <p style="color: red">{{ cota.errors.cotasMin }}</p>
+                        <p style="color: red">{{ cota.errors.faltaCota }}</p>
 
                         <button type="button" @click="cota.enviar.cotas--" class="btn btn-plus">-</button>
                         <input type="number" class="input-number" v-model="cota.enviar.cotas" min="0" max="10">
@@ -56,21 +57,39 @@ export default {
 
 
         const submit = () => {
-            if (cota.enviar.nome !== '' && cota.enviar.email !== '' && cota.enviar.cotas !== 0 && cota.enviar.cotas >= 1) {
+            if (cota.enviar.nome !== '' && cota.enviar.email !== '' && cota.enviar.cotas !== 0 && cota.enviar.cotas >= 1  && cota.enviar.cotas < cota.data.QuantidadeCotas) {
                 closeModalPresentear();
                 openModalPresente();
             } else {
                 if (cota.enviar.nome === '') {
                     cota.errors.nome = 'O campo nome não pode estar vazio';
+                }else{
+                    cota.errors.nome = '';
+
                 }
                 if (cota.enviar.email === '') {
                     cota.errors.email = 'O campo email não pode estar vazio';
+                }else{
+                    cota.errors.email = '';
+
                 }
                 if (cota.enviar.cotas === 0) {
                     cota.errors.cotas = 'O campo nome não pode estar igual a zero';
+                }else{
+                    cota.errors.cotas = '';
+
                 }
-                if (cota.enviar.cotas <= 1) {
+                if (cota.enviar.cotas < 0) {
                     cota.errors.cotasMin = 'A quantidade de cotas não pode ser menor que 0';
+                }else{
+                    cota.errors.cotasMin = '';
+
+                }
+                if(cota.enviar.cotas > cota.data.QuantidadeCotas){
+                    cota.errors.faltaCota = 'A sua quantidade de cotas não pode ser superior a quantidade enviada!'
+                }else{
+                    cota.errors.faltaCota = ''
+
                 }
             }
         };

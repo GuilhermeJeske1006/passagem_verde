@@ -11,7 +11,18 @@
                     <div class="form-group text-center">
                         <img :src="cota.pix.imagemQrcode" class="img-fluid" alt="">
                         <br>
-                        <p style="overflow: auto;">{{ cota.pix.qrcode }}</p>
+                        <!-- <p style="overflow: auto;">{{ cota.pix.qrcode }}</p> -->
+
+                        <div v-if="isSupported">
+                            <a class="btn" @click='copy(cota.pix.qrcode)'>
+                                <span v-if='!copied'>Copiar</span>
+                                <span v-else>Copiado!</span>
+                            </a>
+                            <p v-if="text != ''">Pix copiado: <code>{{ text || '' }}</code></p>
+                        </div>
+                        <p v-else>
+                            Your browser does not support Clipboard API
+                        </p>
                     </div>
                     <button type="submit" class="btn btn-adquirir">Já paguei</button>
 
@@ -24,12 +35,20 @@
 
 <script>
 import { useCotaStore } from "@/stores/CotaStore";
+import { ref } from 'vue';
+import { useClipboard } from '@vueuse/core'
+
 
 export default {
     setup() {
         const cota = useCotaStore()
 
-         const closeModalPix = () => {
+        const source = ref(cota.pix.qrcode)
+
+        const { text, copy, copied, isSupported } = useClipboard({ source })
+
+
+        const closeModalPix = () => {
             cota.showCardPix = false
             closeModalAdquirir()
             document.body.classList.remove('modal-open');
@@ -42,9 +61,15 @@ export default {
             cota.metodo.pix = false
             document.body.classList.remove('modal-open');
         };
+
         return {
             cota,
-            closeModalPix
+            copy,
+            closeModalPix,
+            text,
+            copied,
+            isSupported
+
         }
     },
 }

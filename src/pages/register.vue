@@ -11,7 +11,7 @@
                                 <img src="@/assets/logo.png" style="
     margin-bottom: 15%;
 " alt="IMG">
-                                <span v-if="erroNewPassword.erroSimbolo != '' ||
+                                <!-- <span v-if="erroNewPassword.erroSimbolo != '' ||
                                     erroNewPassword.erroMinusculo != '' ||
                                     erroNewPassword.erroMinimo != ''
                                     " class="span-requisitos text-base font-weight-medium mt-2">
@@ -37,7 +37,7 @@
                                             erroNewPassword.erroSimbolo
                                         }}</p>
                                     </li>
-                                </ul>
+                                </ul> -->
                             </div>
                         </div>
                         <div class="col-md-7">
@@ -134,15 +134,15 @@
                                 </div> -->
                                 <div class="form-group">
                                     <div class="wrap-input100 validate-input">
-                                            <input class="input100" v-model="usuario.cadastro.whatsapp" type="number"
-                                                name="pass" placeholder="Seu Whatsapp">
+                                            <input class="input100" v-model="usuario.cadastro.whatsapp" type="text"
+                                                name="pass" @input="formatarTelefone" placeholder="Seu Whatsapp">
                                             <span class="focus-input100"></span>
                                             <span class="symbol-input100">
                                                 <i class="fa fa-whatsapp" aria-hidden="true"></i>
                                             </span>
                                         </div>
                                 </div>
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <div class="wrap-input100 validate-input" data-validate="Password is required">
                                         <input @input="validatePassword" class="input100" v-model="usuario.cadastro.senha"
                                             type="password" name="pass" placeholder="Sua Senha">
@@ -151,7 +151,7 @@
                                             <i class="fa fa-lock" aria-hidden="true"></i>
                                         </span>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <div class="form-group d-flex m-3">
                                         <input class="ml-5 mr-5"  v-model="usuario.cadastro.aceite"
@@ -165,13 +165,8 @@
 
 
                                 <div class=" container-login100-form-btn">
-                                    <button disabled="disabled" v-if="erroNewPassword.erroSimbolo != '' ||
-                                        erroNewPassword.erroMinusculo != '' ||
-                                        erroNewPassword.erroMinimo != ''
-                                        " class=" disabled login100-form-btn">
-                                        Registrar
-                                    </button>
-                                    <button v-else type="submit" class="login100-form-btn">
+                                    
+                                    <button type="submit" class="login100-form-btn">
                                         Registrar
                                     </button>
                                 </div>
@@ -185,7 +180,7 @@
 </template>
   
 <script>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useUsuarioStore } from "@/stores/UserStore";
 
 export default {
@@ -206,6 +201,24 @@ export default {
             email: '',
             aceite: ''
         })
+
+        const telefone = ref(usuario.cadastro.whatsapp);
+
+
+        const formatarTelefone = () => {
+            let telefoneLimpo = telefone.value.replace(/\D/g, '');
+
+            if (telefoneLimpo.length === 11) {
+                telefone.value = `(${telefoneLimpo.slice(0, 2)}) ${telefoneLimpo.slice(2, 7)}-${telefoneLimpo.slice(7)}`;
+            } else if (telefoneLimpo.length === 10) {
+                telefone.value = `(${telefoneLimpo.slice(0, 2)}) ${telefoneLimpo.slice(2, 6)}-${telefoneLimpo.slice(6)}`;
+            } else {
+                telefone.value = telefoneLimpo;
+            }
+            };
+
+                watch(telefone, formatarTelefone);
+
 
         const validatePassword = () => {
             const newPassword = usuario.cadastro.senha;
@@ -240,7 +253,7 @@ export default {
 
         const submit = () => {
             if (usuario.cadastro.nome != '' && usuario.cadastro.sobrenome != ''
-                && usuario.cadastro.email != '' && usuario.cadastro.senha != '' 
+                && usuario.cadastro.email != '' 
                 && usuario.cadastro.aceite == true) {
                 usuario.registrar()
             } else {
@@ -256,9 +269,10 @@ export default {
                 if(usuario.cadastro.aceite == false){
                     errors.value.email = 'Por favor! Selecione os termos de aceite!'
                 }
-                if (usuario.cadastro.senha == '') {
-                    validatePassword()
-                }
+                
+                // if (usuario.cadastro.senha == '') {
+                //     validatePassword()
+                // }
             }
         }
 
@@ -268,7 +282,8 @@ export default {
             validatePassword,
             redefinir,
             submit,
-            errors
+            errors,
+            formatarTelefone
 
         };
     },

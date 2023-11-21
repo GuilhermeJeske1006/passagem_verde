@@ -118,7 +118,7 @@ export default {
             erroMinimo: "A senha deve ter pelo menos 8 caracteres",
                 erroMinusculo: "A senha deve conter pelo menos um caractere Maiusculo",
                 erroSimbolo:
-                    "A senha deve conter pelo menos um número, símbolo ou caractere de espaço",
+                    "A senha deve conter pelo menos um símbolo ou caractere de especial.",
         })
 
         const validatePassword = () => {
@@ -139,11 +139,11 @@ export default {
             }
 
             // Verifica se a senha tem pelo menos um número, símbolo ou caractere de espaço em branco
-            if (/[0-9!@#$%^&*()\s]/.test(newPassword)) {
+            if (/[!@#$%^&*()\s]/.test(newPassword)) {
                 erroNewPassword.value.erroSimbolo = "";
             } else {
                 erroNewPassword.value.erroSimbolo =
-                    "A senha deve conter pelo menos um número, símbolo ou caractere de espaço.";
+                    "A senha deve conter pelo menos um símbolo ou caractere de especial.";
             }
         }
 

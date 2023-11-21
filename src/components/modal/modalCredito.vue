@@ -22,8 +22,8 @@
                     </div>
                     <div class="form-group">
                         <div class="wrap-input100 validate-input">
-                            <input class="input100" v-model="cota.credito.cpf" type="text" required name="pass" id="cpf"
-                                placeholder="Numero do Cpf">
+                            <input class="input100" @input="formatarCpf" v-model="cota.credito.cpf" type="text" required
+                                name="pass" id="cpf" placeholder="Numero do Cpf">
                             <span class="focus-input100"></span>
                             <span class="symbol-input100">
                                 <i class="fa fa-vcard-o" aria-hidden="true"></i>
@@ -70,8 +70,8 @@
                         <div class="form-group col-md-6">
 
                             <div class="wrap-input100 validate-input">
-                                <input class="input100" v-model="cota.credito.mes" type="text" required name="pass"
-                                    id="mes" placeholder="Mês Expiração">
+                                <input class="input100" v-model="cota.credito.mes" type="text" required name="pass" id="mes"
+                                    placeholder="Mês Expiração">
                                 <span class="focus-input100"></span>
                                 <span class="symbol-input100">
                                     <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -102,27 +102,25 @@
 
 <script>
 import { useCotaStore } from "@/stores/CotaStore";
+import {  watch } from 'vue';
 
 export default {
     setup() {
         const cota = useCotaStore()
 
         const pagarCredito = () => {
-            console.log('ofeowjfiojwioefj')
             if (cota.credito.nome != '' && cota.credito.cpf != '' &&
                 cota.credito.numero_cartao != '' && cota.credito.cvv != ''
                 && cota.credito.mes != '' && cota.credito.ano != '') {
 
 
-                    
                 try {
                     window.EfiJs.CreditCard
                         .setCardNumber(cota.credito.numero_cartao.toString())
                         .verifyCardBrand()
                         .then(brand => {
                             cota.credito.bandeira = brand
-                            console.log(brand)
-
+                            
                             if (brand !== 'undefined') {
                                 try {
                                     window.EfiJs.CreditCard
@@ -168,6 +166,23 @@ export default {
                 }
             }
         };
+
+
+        const formatarCpf = () => {
+            let cpfLimpo = cota.credito.cpf.replace(/\D/g, '');
+
+            if (cpfLimpo.length >= 3 && cpfLimpo.length <= 5) {
+                cota.credito.cpf = `${cpfLimpo.slice(0, 3)}.${cpfLimpo.slice(3)}`;
+            } else if (cpfLimpo.length >= 6 && cpfLimpo.length <= 8) {
+                cota.credito.cpf = `${cpfLimpo.slice(0, 3)}.${cpfLimpo.slice(3, 6)}.${cpfLimpo.slice(6)}`;
+            } else if (cpfLimpo.length >= 9 && cpfLimpo.length <= 11) {
+                cota.credito.cpf = `${cpfLimpo.slice(0, 3)}.${cpfLimpo.slice(3, 6)}.${cpfLimpo.slice(6, 9)}-${cpfLimpo.slice(9)}`;
+            } else {
+                cota.credito.cpf = cpfLimpo;
+            }
+        };
+
+        watch(formatarCpf);
 
         const closeModalAdquirir = () => {
             cota.showModalAdquirir = false

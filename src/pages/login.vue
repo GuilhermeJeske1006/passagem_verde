@@ -66,10 +66,10 @@
           </div>
 
           <div class="text-center p-t-136">
-            <a class="txt2" href="/register">
+            <RouterLink class="txt2" to="/register">
 							Cria a sua conta
 							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
-						</a>
+						</RouterLink>
           </div>
         </form>
       </div>

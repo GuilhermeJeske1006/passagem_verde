@@ -146,33 +146,12 @@
 
                         </div>
                     </div>
-
-
-
                 </div>
 
                 <div class="col-12 col-map">
                     <div class="col-12">
                         <button class="btn btn-confira">Confira os projetos que você ajudou</button>
                     </div>
-
-
-                    <!-- <div class="carousel">
-                            <div class="carousel-inner">
-                                <div v-for="(item, index) in cota.data.Projeto" :key="index" class="carousel-item"
-                                    :class="{ 'active': index === currentIndex }">
-                                    <img src="https://picsum.photos/seed/picsum/200/300" alt="Slide Image">
-                                    <div class="col-arvorometro col-12 mt-2">
-                                        <h4 class="h4-nome-projeto">{{ item.NomeProjeto }}</h4>
-                                        <a :href="item.UrlSite" target="_blank" class="p-nome-projeto">Ver no mapa</a>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <a class="carousel-control-prev" @click="prevSlide">&lsaquo;</a>
-                            <a class="carousel-control-next" @click="nextSlide">&rsaquo;</a>
-                        </div> -->
 
                     <div class="text-center p-t-12 d-flex align-items-center flex-column">
 

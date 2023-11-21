@@ -83,7 +83,7 @@ export default {
         const valorTotal = computed(() => {
             const vlrCota = 2.20;
             const total = cota.cotas * vlrCota;
-            return parseFloat(total.toFixed(2));
+            return parseFloat(total.toFixed(3));
         });
 
 
