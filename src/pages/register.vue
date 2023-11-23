@@ -9,35 +9,16 @@
                         <div class="col-md-5">
                             <div class="login100-pic js-tilt" data-tilt>
                                 <img src="@/assets/logo.png" style="
-    margin-bottom: 15%;
+    margin-bottom: 57%;
 " alt="IMG">
-                                <!-- <span v-if="erroNewPassword.erroSimbolo != '' ||
-                                    erroNewPassword.erroMinusculo != '' ||
-                                    erroNewPassword.erroMinimo != ''
-                                    " class="span-requisitos text-base font-weight-medium mt-2">
-                                    Requisitos de senha:
-                                </span>
+                                     <a href="https://plantacao.s3.amazonaws.com/regulamento.html" class=" text-decoration-none" target="_blank" rel="noopener noreferrer">
+                                        <span class="span-requisitos text-base mt-5">
 
-                                <ul class="d-flex flex-column mt-2">
-                                    <li style="list-style-type: circle" v-if="erroNewPassword.erroMinimo != ''"
-                                        class="d-flex">
+                                        Veja aqui o regulamento:
+                                    </span>
 
-                                        <p class=" font-weight-medium">{{
-                                            erroNewPassword.erroMinimo
-                                        }}</p>
-                                    </li>
-                                    <li v-if="erroNewPassword.erroMinusculo != ''" class="d-flex">
+                                     </a>
 
-                                        <p class="font-weight-medium">{{
-                                            erroNewPassword.erroMinusculo
-                                        }}</p>
-                                    </li>
-                                    <li v-if="erroNewPassword.erroSimbolo != ''" class="d-flex">
-                                        <p class="font-weight-medium">{{
-                                            erroNewPassword.erroSimbolo
-                                        }}</p>
-                                    </li>
-                                </ul> -->
                             </div>
                         </div>
                         <div class="col-md-7">
@@ -162,6 +143,8 @@
                                              <a href="https://plantacao.s3.amazonaws.com/politica.html" target="_blank"
                                              >Política de Privacidade</a></p>
                                 </div>
+
+                              
 
 
                                 <div class=" container-login100-form-btn">

@@ -1,8 +1,12 @@
 <template>
-    <div class="modal " tabindex="-1" role="dialog"
-        :class="{ 'show': cota.showCardCredito, 'd-block': cota.showCardCredito }">
+    <div class="modal"
+  :class="{ 'show': cota.showCardCredito, 'd-block': cota.showCardCredito, 'loading-modal': cota.credito.isLoading }"
+  tabindex="-1"
+  role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
+                <div v-if="cota.credito.isLoading" class="loading modal-body"></div>
+
                 <form @submit.prevent="pagarCredito" class="modal-body">
                     <button type="button" class="btn" @click="closeModalCredito">
                         <span>&times;</span>
@@ -47,8 +51,8 @@
                     <div class="form-group">
 
                         <div class="wrap-input100 validate-input">
-                            <input @change="getBandeira" class="input100" v-model="cota.credito.numero_cartao" type="number"
-                                required name="pass" id="numero_cartao" placeholder="Numero do cartão">
+                            <input @input="formatarNumberCard" class="input100" v-model="cota.credito.numero_cartao"
+                                type="text" required name="pass" id="numero_cartao" placeholder="Numero do cartão">
                             <span class="focus-input100"></span>
                             <span class="symbol-input100">
                                 <i class="fa fa-id-card" aria-hidden="true"></i>
@@ -58,8 +62,8 @@
                     <div class="form-group">
 
                         <div class="wrap-input100 validate-input">
-                            <input class="input100" v-model="cota.credito.cvv" type="text" required name="pass" id="cvv"
-                                placeholder="CVV">
+                            <input class="input100" @input="formatarCvv" v-model="cota.credito.cvv" type="text" required
+                                name="pass" id="cvv" placeholder="CVV" maxlength="3">
                             <span class="focus-input100"></span>
                             <span class="symbol-input100">
                                 <i class="fa fa-lock" aria-hidden="true"></i>
@@ -70,8 +74,8 @@
                         <div class="form-group col-md-6">
 
                             <div class="wrap-input100 validate-input">
-                                <input class="input100" v-model="cota.credito.mes" type="text" required name="pass" id="mes"
-                                    placeholder="Mês Expiração">
+                                <input class="input100" @input="formatarMes" v-model="cota.credito.mes" type="text" required name="pass" id="mes"
+                                    maxlength="2" placeholder="Mês Expiração">
                                 <span class="focus-input100"></span>
                                 <span class="symbol-input100">
                                     <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -81,8 +85,8 @@
                         <div class="form-group col-md-6">
 
                             <div class="wrap-input100 validate-input">
-                                <input class="input100" v-model="cota.credito.ano" type="number" required name="pass"
-                                    id="ano" placeholder="Ano Expiração">
+                                <input class="input100" maxlength="4" @input="formatarAno" v-model="cota.credito.ano" type="text" required
+                                    name="pass" id="ano" placeholder="Ano Expiração">
                                 <span class="focus-input100"></span>
                                 <span class="symbol-input100">
                                     <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -102,7 +106,7 @@
 
 <script>
 import { useCotaStore } from "@/stores/CotaStore";
-import {  watch } from 'vue';
+import { watch } from 'vue';
 
 export default {
     setup() {
@@ -120,7 +124,7 @@ export default {
                         .verifyCardBrand()
                         .then(brand => {
                             cota.credito.bandeira = brand
-                            
+
                             if (brand !== 'undefined') {
                                 try {
                                     window.EfiJs.CreditCard
@@ -182,7 +186,53 @@ export default {
             }
         };
 
+        const formatarNumberCard = () => {
+            let card_limpo = cota.credito.numero_cartao.replace(/\D/g, '');
+
+            if (card_limpo.length >= 4 && card_limpo.length <= 8) {
+                cota.credito.numero_cartao = `${card_limpo.slice(0, 4)} ${card_limpo.slice(4)}`;
+            } else if (card_limpo.length >= 9 && card_limpo.length <= 13) {
+                cota.credito.numero_cartao = `${card_limpo.slice(0, 4)} ${card_limpo.slice(4, 8)} ${card_limpo.slice(8)}`;
+            } else if (card_limpo.length >= 14 && card_limpo.length <= 16) {
+                cota.credito.numero_cartao = `${card_limpo.slice(0, 4)} ${card_limpo.slice(4, 8)} ${card_limpo.slice(8, 12)} ${card_limpo.slice(12)}`;
+            } else {
+                cota.credito.numero_cartao = card_limpo.slice(0, 16);
+            }
+
+        };
+
+
+        const formatarCvv = () => {
+            let formattedCVV = cota.credito.cvv.replace(/\D/g, '');
+
+            formattedCVV = formattedCVV.slice(0, 3);
+
+            cota.credito.cvv = formattedCVV;
+        };
+
+        const formatarMes = () => {
+            let formattedMes = cota.credito.mes.replace(/\D/g, '');
+
+            formattedMes = formattedMes.slice(0, 2);
+
+            cota.credito.mes = formattedMes;
+        };
+
+        const formatarAno = () => {
+            let formattedAno = cota.credito.ano.replace(/\D/g, '');
+
+            formattedAno = formattedAno.slice(0, 4);
+
+            cota.credito.ano = formattedAno;
+        };
+
         watch(formatarCpf);
+        watch(formatarNumberCard)
+        watch(formatarCvv)
+        watch(formatarAno)
+        watch(formatarMes)
+
+
 
         const closeModalAdquirir = () => {
             cota.showModalAdquirir = false
@@ -194,6 +244,7 @@ export default {
         const closeModalCredito = () => {
             cota.showCardCredito = false
             closeModalAdquirir()
+            cota.credito = {}
             document.body.classList.remove('modal-open');
 
         }
@@ -210,3 +261,18 @@ export default {
     },
 }
 </script>
+
+<style scoped>
+.loading-modal::before {
+  content: "";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.7); /* Ajuste a opacidade conforme necessário */
+  z-index: 998; /* Coloque abaixo do modal */
+}
+
+</style>

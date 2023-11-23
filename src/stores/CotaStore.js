@@ -20,7 +20,8 @@ export const useCotaStore = defineStore("cota", {
       pix: {
         qrcode: '',
         imagemQrcode: "",
-        linkVisualizacao: ''
+        linkVisualizacao: '',
+        isLoading: false,
       },
       isMobile: false,
       showCardAdquirir: false,
@@ -44,8 +45,15 @@ export const useCotaStore = defineStore("cota", {
         cpf: "",
         payment_token: "",
         card_mask: "",
+        isLoading: false
       },
 
+      presente: {
+        isLoading: false
+      },
+      notifica:{
+        isLoading: false
+      },
       metodo: {
         credito: false,
         pix: false,
@@ -68,6 +76,7 @@ export const useCotaStore = defineStore("cota", {
       notification: {
         Cota: {
           isChecked: false,
+          length: 0
         },
       },
       currentIndex: 0,
@@ -146,7 +155,7 @@ export const useCotaStore = defineStore("cota", {
     postPresente() {
       const apiUrl = "https://api.passagemverde.com.br/transfer";
 
-      this.isLoading = true
+      this.presente.isLoading = true
 
       const dataToSend = {
         emailDestino: this.enviar.email,
@@ -168,7 +177,6 @@ export const useCotaStore = defineStore("cota", {
           return response.json();
         })
         .then((responseData) => {
-          useToast().success("Presente enviado com sucesso");
           console.log(responseData);
         })
         .catch((error) => {
@@ -176,14 +184,14 @@ export const useCotaStore = defineStore("cota", {
           console.error("Erro ao fazer a solicitação GET:", error);
         })
         .finally(() => {
-          this.isLoading = false;
+          this.presente.isLoading = false;
         })
     },
 
     postAceitarNotificacao() {
       const apiUrl = "https://api.passagemverde.com.br/transfer/accepted";
 
-      this.isLoading = true
+      this.notifica.isLoading = true
 
       const checkedItems = this.notification.Cota.filter(
         (item) => item.isChecked
@@ -208,19 +216,21 @@ export const useCotaStore = defineStore("cota", {
         })
         .then((responseData) => {
           console.log(responseData);
+          useToast().success("Sua notificação foi aceita com sucesso!");
         })
         .catch((error) => {
+          useToast().error("Erro ao aceitar notificação");
           console.error("Erro ao fazer a solicitação POST:", error);
         })
         .finally(() => {
-          this.isLoading = false;
+          this.notifica.isLoading = false;
         })
     },
 
     postCredito() {
       const apiUrl = "https://api.passagemverde.com.br/payment";
 
-      this.isLoading = true
+      this.credito.isLoading = true
 
       const cpfSemPontuacao = this.credito.cpf.replace(/\D/g, '');
 
@@ -232,7 +242,15 @@ export const useCotaStore = defineStore("cota", {
           payment_token: this.credito.payment_token,
           card_mask: this.credito.card_mask,
           cpf: cpfSemPontuacao,
-          name: this.credito.nome
+          name: this.credito.nome,
+          phone_number : "47999999999",
+          birth : "2003-12-07",
+          street : "R ARTHUR OLINGER",
+          number : 22,
+          neighborhood : "CENTRO I - URBANO",
+          zipcode : "88350250",
+          city : "BRUSQUE",
+          state : "SC"
         },
       };
 
@@ -249,22 +267,26 @@ export const useCotaStore = defineStore("cota", {
           }
           return response.json();
         })
-        .then(() => {
+        .then((res) => {
+          console.log('resposta transação', res)
+          useToast().success("Seu pagamento está sendo processado! Em breve, as cotas adquiridas estão disponíveis na sua conta.");
+          this.getUser()
           this.closeModalCredito()
-          useToast().success("Pagamento feito com sucesso!");
         })
-        .catch(() => {
-          useToast().error("Erro ao Fazer o pagamento");
+        .catch((err) => {
+          console.error('erro na transacao', err)
+          useToast().info("Atenção! Ocorreu algum erro na sua transação!");
+
         })
         .finally(() => {
-          this.isLoading = false;
+          this.credito.isLoading = false;
         })
     },
 
     postPix() {
       const apiUrl = "https://api.passagemverde.com.br/payment";
 
-      this.isLoading = true
+      this.pix.isLoading = true
 
       const data = {
         typePayment: "pix",
@@ -291,7 +313,7 @@ export const useCotaStore = defineStore("cota", {
           useToast().error("Erro ao solicitar o pix! Tente novamente!");
         })
         .finally(() => {
-          this.isLoading = false;
+          this.pix.isLoading = false;
         })
     },
 

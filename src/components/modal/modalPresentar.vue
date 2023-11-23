@@ -33,7 +33,7 @@
                         <p style="color: red">{{ cota.errors.faltaCota }}</p>
 
                         <button type="button" @click="cota.enviar.cotas--" class="btn btn-plus">-</button>
-                        <input type="number" class="input-number" v-model="cota.enviar.cotas" min="0" max="10">
+                        <input type="number" class="input-number" v-model="cota.enviar.cotas" min="0" max="10000">
                         <button type="button" @click="cota.enviar.cotas++" class="btn btn-plus">+</button>
                     </div>
                     <div class="text-center">
@@ -54,12 +54,20 @@ export default {
     setup() {
         const cota = useCotaStore()
 
-
-
-        const submit = () => {
+        const  submit = () => {
             if (cota.enviar.nome !== '' && cota.enviar.email !== '' && cota.enviar.cotas !== 0 && cota.enviar.cotas >= 1  && cota.enviar.cotas < cota.data.QuantidadeCotas) {
+
+            try{
                 closeModalPresentear();
                 openModalPresente();
+                 cota.postPresente();
+                 cota.getPresente();
+                 cota.getUser()
+                 cota.enviar = ''
+            }catch (error) {
+                console.error('Erro ao aceitar notificações', error);
+            }
+            
             } else {
                 if (cota.enviar.nome === '') {
                     cota.errors.nome = 'O campo nome não pode estar vazio';
@@ -86,7 +94,7 @@ export default {
 
                 }
                 if(cota.enviar.cotas > cota.data.QuantidadeCotas){
-                    cota.errors.faltaCota = 'A sua quantidade de cotas não pode ser superior a quantidade enviada!'
+                    cota.errors.faltaCota = 'A sua quantidade de cotas é inferior à quantidade que deseja presentear! Adquira mais cotas para prosseguir'
                 }else{
                     cota.errors.faltaCota = ''
 

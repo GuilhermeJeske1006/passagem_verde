@@ -4,9 +4,9 @@
   <div class="limiter">
     <div class="container-login100">
       <div class="wrap-login100">
-        <div class="login100-pic js-tilt" data-tilt>
+        <a href="https://www.passagemverde.com.br/"  target="_blank" class="login100-pic js-tilt">
           <img src="@/assets/logo.png" class="logo-position" alt="IMG" />
-        </div>
+        </a>
 
         <form @submit.prevent="login" class="login100-form validate-form">
           <span class="login100-form-title"> Faça o seu login </span>
@@ -66,8 +66,8 @@
           </div>
 
           <div class="text-center p-t-136">
-            <RouterLink class="txt2" to="/register">
-							Cria a sua conta
+            <RouterLink class="txt2 font-weight-bold" style="font-size: 18px;" to="/register">
+							Criar a sua conta
 							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
 						</RouterLink>
           </div>

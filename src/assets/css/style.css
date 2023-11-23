@@ -43,6 +43,11 @@
         left: 11% !important;
     }
 
+    .icon-container {
+        left: 0 !important;
+    top: 16% !important; 
+    }
+
 
 
     .btn-arvorometro {
@@ -358,6 +363,11 @@
     font-weight: 700;
     margin-top: 8px;
 }
+.btn:hover {
+    background-color: initial;
+    color: initial;
+    border-color: initial;
+  }
 
 .nuvem {
     position: relative;
@@ -517,6 +527,42 @@ text-align: start;
     transform: rotate(-19deg);
 
 }
+.loading {
+    width: 48px;
+    height: 48px;
+    border: 5px solid #000;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 999;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-modal::before {
+  content: "";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.7); /* Ajuste a opacidade conforme necessário */
+  z-index: 998; /* Coloque abaixo do modal */
+}
 
 
 .rounded-square {
@@ -531,7 +577,7 @@ text-align: start;
     line-height: 100px;
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
-    font-size: 20px;
+    font-size: 18px;
     font-style: normal;
     color: #F6F6F6;
     position: absolute;
@@ -575,15 +621,26 @@ text-align: start;
         position: absolute;
         width: 40px;
         height: 40px;
-        background-color: #135b2d;
+        background-color: #147933;
         border-radius: 50%;
-        left: 0;
-        top: 16%;
+        left: 19%;
+        top: 1%;
     }
+
+    .notification-icon {
+        color: rgb(255, 255, 255) !important;
+    align-items: center;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    height: 40px;
+    }
+
 .notification-badge {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: -5px;
+    right: -4px;
     background-color: #e74c3c;
     /* Cor de fundo do número de notificações */
     color: #fff;

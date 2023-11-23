@@ -1,7 +1,9 @@
 <template>
-    <div class="modal " tabindex="-1" role="dialog" :class="{ 'show': cota.showCardPix, 'd-block': cota.showCardPix }">
+    <div class="modal " tabindex="-1" role="dialog" :class="{ 'show': cota.showCardPix, 'd-block': cota.showCardPix, 'loading-modal': cota.pix.isLoading }">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
+                <div v-if="cota.pix.isLoading" class="loading modal-body"></div>
+
                 <form @submit.prevent="closeModalPix" class="modal-body">
                     <button type="button" class="btn" @click="closeModalPix">
                         <span>&times;</span>
@@ -74,3 +76,7 @@ export default {
     },
 }
 </script>
+
+<style scoped>
+
+</style>

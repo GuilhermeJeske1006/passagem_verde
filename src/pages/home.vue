@@ -9,6 +9,7 @@
 
 
                 <div @click="openModalNotificacao" class="icon-container">
+                    <i class="fa fa-bell notification-icon" style="color: #ffffff;"></i>
                     <div class="notification-badge">{{ cota.notification.Cota.length }}</div>
                 </div>
 
@@ -140,7 +141,7 @@
                         <div class="nuvem-branca">
                             <div class="speech-bubble-2">
                                 <p>Em cada <span>viagem,</span> temos a oportunidade <br> de transformar nossa jornada em
-                                    uma <br><span>foresta de esperença💛</span>
+                                    uma <br><span>floresta de esperança💛</span>
                                 </p>
                             </div>
 
@@ -150,7 +151,8 @@
 
                 <div class="col-12 col-map">
                     <div class="col-12">
-                        <button class="btn btn-confira">Confira os projetos que você ajudou</button>
+                        <div class="btn btn-confira " style="pointer-events: none;">Veja as áreas de plantio do projeto
+                        </div>
                     </div>
 
                     <div class="text-center p-t-12 d-flex align-items-center flex-column">
@@ -193,7 +195,7 @@
 
 <script>
 import { useUsuarioStore } from "@/stores/UserStore";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { computed, onMounted, onBeforeUnmount } from 'vue';
 import { useCotaStore } from "@/stores/CotaStore";
 import modalNotificacao from '@/components/modal/modalNotificacao.vue';
@@ -289,6 +291,48 @@ export default {
             }
         };
 
+        const updateCota = (newData) => {
+            // Lógica para atualizar a tabela
+            console.log('Tabela atualizada');
+            // Define a variável CotaAlterados como true
+
+            cota.data = newData;
+
+            console.log(cota.data)
+        };
+
+        const updateNotifi = (newData) => {
+            // Lógica para atualizar a tabela
+            console.log('Tabela atualizada');
+            // Define a variável CotaAlterados como true
+
+            cota.notification = newData;
+
+            console.log( cota.notification )
+        };
+
+
+        watch(
+            () => cota.data,
+            (newData, oldData) => {
+                // Lógica a ser executada quando cota.data mudar
+                console.log('Cota alterados:', newData, oldData);
+
+                updateCota(newData);
+
+            }
+        );
+
+        watch(
+            () => cota.notification.cota,
+            (newData, oldData) => {
+                // Lógica a ser executada quando cota.data mudar
+                console.log('Dados alterados:', newData, oldData);
+                updateNotifi(newData)
+
+            }
+        );
+
         return {
             usuario,
             errors,
@@ -309,30 +353,6 @@ export default {
 </script>
 
 <style scoped>
-.loading {
-    width: 48px;
-    height: 48px;
-    border: 5px solid #000;
-    border-bottom-color: transparent;
-    border-radius: 50%;
-    display: inline-block;
-    box-sizing: border-box;
-    animation: rotation 1s linear infinite;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-}
-
-@keyframes rotation {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
 .carousel-container {
     position: relative;
     width: 80%;
