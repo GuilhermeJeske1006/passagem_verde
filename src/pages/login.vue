@@ -9,7 +9,7 @@
         </a>
 
         <form @submit.prevent="login" class="login100-form validate-form">
-          <span class="login100-form-title"> Faça o seu login </span>
+          <span class="login100-form-title"> Entre com seu e-mail e senha </span>
 
           <div
             class="wrap-input100 validate-input"
@@ -40,7 +40,7 @@
               v-model="usuario.password"
               type="password"
               name="pass"
-              placeholder="Password"
+              placeholder="Senha"
             />
             <span class="focus-input100"></span>
             <span class="symbol-input100">
@@ -53,7 +53,7 @@
           </p>
 
           <div class="container-login100-form-btn">
-            <button type="submit" class="login100-form-btn">Login</button>
+            <button type="submit" class="login100-form-btn">Entrar</button>
           </div>
 
           <div class="text-center p-t-12">
@@ -97,10 +97,10 @@ export default {
         usuario.login();
       } else {
         if (usuario.username === "") {
-          errors.value.username = "O campo username não pode estar vazio";
+          errors.value.username = "O campo email não pode estar vazio";
         }
         if (usuario.password === "") {
-          errors.value.password = "O campo password não pode estar vazio";
+          errors.value.password = "O campo senha não pode estar vazio";
         }
       }
     };

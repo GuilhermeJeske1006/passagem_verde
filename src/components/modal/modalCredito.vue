@@ -1,8 +1,7 @@
 <template>
     <div class="modal"
-  :class="{ 'show': cota.showCardCredito, 'd-block': cota.showCardCredito, 'loading-modal': cota.credito.isLoading }"
-  tabindex="-1"
-  role="dialog">
+        :class="{ 'show': cota.showCardCredito, 'd-block': cota.showCardCredito, 'loading-modal': cota.credito.isLoading }"
+        tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div v-if="cota.credito.isLoading" class="loading modal-body"></div>
@@ -27,7 +26,7 @@
                     <div class="form-group">
                         <div class="wrap-input100 validate-input">
                             <input class="input100" @input="formatarCpf" v-model="cota.credito.cpf" type="text" required
-                                name="pass" id="cpf" placeholder="Numero do Cpf">
+                                name="cpf" id="cpf" placeholder="Número do Cpf">
                             <span class="focus-input100"></span>
                             <span class="symbol-input100">
                                 <i class="fa fa-vcard-o" aria-hidden="true"></i>
@@ -52,7 +51,7 @@
 
                         <div class="wrap-input100 validate-input">
                             <input @input="formatarNumberCard" class="input100" v-model="cota.credito.numero_cartao"
-                                type="text" required name="pass" id="numero_cartao" placeholder="Numero do cartão">
+                                type="text" required name="pass" id="numero_cartao" placeholder="Número do cartão">
                             <span class="focus-input100"></span>
                             <span class="symbol-input100">
                                 <i class="fa fa-id-card" aria-hidden="true"></i>
@@ -74,8 +73,8 @@
                         <div class="form-group col-md-6">
 
                             <div class="wrap-input100 validate-input">
-                                <input class="input100" @input="formatarMes" v-model="cota.credito.mes" type="text" required name="pass" id="mes"
-                                    maxlength="2" placeholder="Mês Expiração">
+                                <input class="input100" @input="formatarMes" v-model="cota.credito.mes" type="text" required
+                                    name="pass" id="mes" maxlength="2" placeholder="Mês Expiração">
                                 <span class="focus-input100"></span>
                                 <span class="symbol-input100">
                                     <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -85,8 +84,8 @@
                         <div class="form-group col-md-6">
 
                             <div class="wrap-input100 validate-input">
-                                <input class="input100" maxlength="4" @input="formatarAno" v-model="cota.credito.ano" type="text" required
-                                    name="pass" id="ano" placeholder="Ano Expiração">
+                                <input class="input100" maxlength="4" @input="formatarAno" v-model="cota.credito.ano"
+                                    type="text" required name="pass" id="ano" placeholder="Ano Expiração">
                                 <span class="focus-input100"></span>
                                 <span class="symbol-input100">
                                     <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -95,7 +94,9 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-adquirir">Finalizar Pagamento</button>
+                    <div class="row justify-content-center">
+                        <button type="submit" class="btn btn-adquirir" style="width: 60%; padding: 10px 1rem 10px 1rem;">Finalizar Pagamento</button>
+                    </div>
 
                 </form>
 
@@ -173,57 +174,65 @@ export default {
 
 
         const formatarCpf = () => {
-            let cpfLimpo = cota.credito.cpf.replace(/\D/g, '');
+            if (cota.credito.cpf != '') {
+                let cpfLimpo = cota.credito.cpf.replace(/\D/g, '');
 
-            if (cpfLimpo.length >= 3 && cpfLimpo.length <= 5) {
-                cota.credito.cpf = `${cpfLimpo.slice(0, 3)}.${cpfLimpo.slice(3)}`;
-            } else if (cpfLimpo.length >= 6 && cpfLimpo.length <= 8) {
-                cota.credito.cpf = `${cpfLimpo.slice(0, 3)}.${cpfLimpo.slice(3, 6)}.${cpfLimpo.slice(6)}`;
-            } else if (cpfLimpo.length >= 9 && cpfLimpo.length <= 11) {
-                cota.credito.cpf = `${cpfLimpo.slice(0, 3)}.${cpfLimpo.slice(3, 6)}.${cpfLimpo.slice(6, 9)}-${cpfLimpo.slice(9)}`;
-            } else {
-                cota.credito.cpf = cpfLimpo;
+                if (cpfLimpo.length >= 3 && cpfLimpo.length <= 5) {
+                    cota.credito.cpf = `${cpfLimpo.slice(0, 3)}.${cpfLimpo.slice(3)}`;
+                } else if (cpfLimpo.length >= 6 && cpfLimpo.length <= 8) {
+                    cota.credito.cpf = `${cpfLimpo.slice(0, 3)}.${cpfLimpo.slice(3, 6)}.${cpfLimpo.slice(6)}`;
+                } else if (cpfLimpo.length >= 9 && cpfLimpo.length <= 11) {
+                    cota.credito.cpf = `${cpfLimpo.slice(0, 3)}.${cpfLimpo.slice(3, 6)}.${cpfLimpo.slice(6, 9)}-${cpfLimpo.slice(9)}`;
+                } else {
+                    cota.credito.cpf = cpfLimpo;
+                }
             }
+
         };
 
         const formatarNumberCard = () => {
-            let card_limpo = cota.credito.numero_cartao.replace(/\D/g, '');
-
-            if (card_limpo.length >= 4 && card_limpo.length <= 8) {
-                cota.credito.numero_cartao = `${card_limpo.slice(0, 4)} ${card_limpo.slice(4)}`;
-            } else if (card_limpo.length >= 9 && card_limpo.length <= 13) {
-                cota.credito.numero_cartao = `${card_limpo.slice(0, 4)} ${card_limpo.slice(4, 8)} ${card_limpo.slice(8)}`;
-            } else if (card_limpo.length >= 14 && card_limpo.length <= 16) {
-                cota.credito.numero_cartao = `${card_limpo.slice(0, 4)} ${card_limpo.slice(4, 8)} ${card_limpo.slice(8, 12)} ${card_limpo.slice(12)}`;
-            } else {
-                cota.credito.numero_cartao = card_limpo.slice(0, 16);
+            if (cota.credito.numero_cartao != '') {
+                let card_limpo = cota.credito.numero_cartao.replace(/\D/g, '');
+                if (card_limpo.length >= 4 && card_limpo.length <= 8) {
+                    cota.credito.numero_cartao = `${card_limpo.slice(0, 4)} ${card_limpo.slice(4)}`;
+                } else if (card_limpo.length >= 9 && card_limpo.length <= 13) {
+                    cota.credito.numero_cartao = `${card_limpo.slice(0, 4)} ${card_limpo.slice(4, 8)} ${card_limpo.slice(8)}`;
+                } else if (card_limpo.length >= 14 && card_limpo.length <= 16) {
+                    cota.credito.numero_cartao = `${card_limpo.slice(0, 4)} ${card_limpo.slice(4, 8)} ${card_limpo.slice(8, 12)} ${card_limpo.slice(12)}`;
+                } else {
+                    cota.credito.numero_cartao = card_limpo.slice(0, 16);
+                }
             }
+
 
         };
 
 
         const formatarCvv = () => {
-            let formattedCVV = cota.credito.cvv.replace(/\D/g, '');
+            if (cota.credito.cvv != '') {
+                let formattedCVV = cota.credito.cvv.replace(/\D/g, '');
+                formattedCVV = formattedCVV.slice(0, 3);
+                cota.credito.cvv = formattedCVV;
+            }
 
-            formattedCVV = formattedCVV.slice(0, 3);
-
-            cota.credito.cvv = formattedCVV;
         };
 
         const formatarMes = () => {
-            let formattedMes = cota.credito.mes.replace(/\D/g, '');
+            if (cota.credito.mes != '') {
+                let formattedMes = cota.credito.mes.replace(/\D/g, '');
+                formattedMes = formattedMes.slice(0, 2);
+                cota.credito.mes = formattedMes;
+            }
 
-            formattedMes = formattedMes.slice(0, 2);
-
-            cota.credito.mes = formattedMes;
         };
 
         const formatarAno = () => {
-            let formattedAno = cota.credito.ano.replace(/\D/g, '');
+            if (cota.credito.ano != '') {
+                let formattedAno = cota.credito.ano.replace(/\D/g, '');
+                formattedAno = formattedAno.slice(0, 4);
+                cota.credito.ano = formattedAno;
+            }
 
-            formattedAno = formattedAno.slice(0, 4);
-
-            cota.credito.ano = formattedAno;
         };
 
         watch(formatarCpf);
@@ -264,15 +273,16 @@ export default {
 
 <style scoped>
 .loading-modal::before {
-  content: "";
-  display: block;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.7); /* Ajuste a opacidade conforme necessário */
-  z-index: 998; /* Coloque abaixo do modal */
+    content: "";
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    /* Ajuste a opacidade conforme necessário */
+    z-index: 998;
+    /* Coloque abaixo do modal */
 }
-
 </style>

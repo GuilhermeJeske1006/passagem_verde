@@ -4,11 +4,11 @@
             <div class="modal-content">
                 <div v-if="cota.pix.isLoading" class="loading modal-body"></div>
 
-                <form @submit.prevent="closeModalPix" class="modal-body">
+                <form @submit.prevent="pagarPix" class="modal-body">
                     <button type="button" class="btn" @click="closeModalPix">
                         <span>&times;</span>
                     </button>
-                    <h5 class="text-center titulo-modal">Scaneie o qrCode</h5>
+                    <h5 class="text-center titulo-modal">Leia ou Copie o PIX</h5>
                     <br />
                     <div class="form-group text-center">
                         <img :src="cota.pix.imagemQrcode" class="img-fluid" alt="">
@@ -26,7 +26,9 @@
                             Your browser does not support Clipboard API
                         </p>
                     </div>
-                    <button type="submit" class="btn btn-adquirir">Já paguei</button>
+                    <div class="row justify-content-center">
+                        <button type="submit" class="btn btn-adquirir" style="width: 54%;">Já paguei</button>
+                    </div>
 
                 </form>
 
@@ -57,6 +59,14 @@ export default {
 
         }
 
+        const pagarPix = () => {
+            cota.getPresente();
+            cota.getUser()
+            cota.showCardPix = false
+            closeModalAdquirir()
+            document.body.classList.remove('modal-open');
+        }
+
         const closeModalAdquirir = () => {
             cota.showModalAdquirir = false
             cota.metodo.credito = false
@@ -70,7 +80,8 @@ export default {
             closeModalPix,
             text,
             copied,
-            isSupported
+            isSupported,
+            pagarPix
 
         }
     },

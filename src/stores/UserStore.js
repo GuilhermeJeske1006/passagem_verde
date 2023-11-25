@@ -58,9 +58,7 @@ export const useUsuarioStore = defineStore("usuario", {
           if (data.AuthenticationResult && data.AuthenticationResult.IdToken) {
             localStorage.setItem("token", data.AuthenticationResult.IdToken);
             router.push("/");
-            useToast().success(
-              "Sucesso ao fazer o login!"
-            );
+            useToast().success("Sucesso ao fazer o login!");
           } else {
             localStorage.setItem("session", data.Session);
             localStorage.setItem("username", this.username);
@@ -70,9 +68,7 @@ export const useUsuarioStore = defineStore("usuario", {
         })
         .catch((error) => {
           console.error("Erro ao fazer a solicitação POST:", error);
-          useToast().error(
-            "Erro ao fazer o login! Tente novamente!"
-          );
+          useToast().error("Erro ao fazer o login! Tente novamente!");
         })
         .finally(() => {
           this.isLoading = false;
@@ -119,14 +115,10 @@ export const useUsuarioStore = defineStore("usuario", {
             localStorage.setItem("token", data.AuthenticationResult.IdToken);
             router.push("/");
           }
-          useToast().success(
-            "Senha redefinida com sucesso!"
-          );
+          useToast().success("Senha redefinida com sucesso!");
         })
         .catch((error) => {
-          useToast().error(
-            "Erro ao redefinir senha! Tente novamente!"
-          );
+          useToast().error("Erro ao redefinir senha! Tente novamente!");
           console.error("Erro ao fazer a solicitação POST:", error);
         });
     },
@@ -143,17 +135,19 @@ export const useUsuarioStore = defineStore("usuario", {
 
       fetch(apiUrl, {
         method: "POST",
-        // headers: {
-        //   "X-Amz-Target":
-        //     "AWSCognitoIdentityProviderService.RespondToAuthChallenge",
-        //   "Content-Type": "application/x-amz-json-1.1",
-        // },
-        body: JSON.stringify(dataToSend), // Converte o objeto para JSON
+        body: JSON.stringify(dataToSend),
       })
         .then((response) => {
           if (!response.ok) {
-            throw new Error("Erro na resposta da API");
+            if (response.status == 409) {
+              useToast().error("Usuario já existe na base de dados!");
+              throw new Error("Usuario já existe na base de dados!");
+            } else {
+              useToast().error("Erro ao criar o usuario!");
+              throw new Error("Erro ao criar o usuario");
+            }
           }
+
           return response.json();
         })
         .then(() => {
@@ -163,10 +157,7 @@ export const useUsuarioStore = defineStore("usuario", {
           );
           router.push("/login");
         })
-        .catch((error) => {
-          useToast().error("Erro ao criar o usuario!");
-          console.error("Erro ao fazer a solicitação POST:", error);
-        });
+        .catch(() => {});
     },
   },
 

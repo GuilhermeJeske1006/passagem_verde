@@ -3,19 +3,17 @@
 
     <div v-else>
         <nav-header />
-        <div class="col-12 flex-page d-flex" style="height: 100vh;">
+        <div class="col-12 flex-page d-flex">
             <div class="col-md-6 col-12 col-nuvem align-items-center justify-content-center">
-
-
-
                 <div @click="openModalNotificacao" class="icon-container">
-                    <i class="fa fa-bell notification-icon" style="color: #ffffff;"></i>
+                    <i class="fa fa-bell notification-icon" tabindex="0" data-bs-toggle="tooltip" title="Notificações"
+                        style="color: #ffffff;"></i>
                     <div class="notification-badge">{{ cota.notification.Cota.length }}</div>
                 </div>
 
                 <div class="nuvem">
                     <div class="speech-bubble">
-                        <p class="p-speech">Faltam apenas <span class="font-bold">{{ 20 - folhasCota }} cotas</span><br>
+                        <p class="p-speech">Faltam apenas <span class="font-bold">{{ 20 - folhasCota }} {{ 20 - folhasCota == 1 ? 'cota' : 'cotas' }}</span><br>
                             para você plantar sua <br> árvore!</p>
                     </div>
                 </div>
@@ -42,87 +40,20 @@
                     <img v-if="folhasCota == 1" src="@/assets/folhas/arvore1.png" class=" img-arvore" alt="">
                     <img v-if="folhasCota == 0" src="@/assets/folhas/arvore0.png" class=" img-arvore" alt="">
 
-                    <h4 class="h4-arvore">{{ folhasCota }} cotas</h4>
-                </figure>
-                <!-- <div class="d-flex m-3 justify-content-center" v-if="isMobile">
-    <button type="button" @click="showCardAdquirirMobile()" class="btn btn-cota">Adquirir cota</button>
-    <button type="button" @click="showCardPresentearMobile()" class="btn btn-cota">Presentear</button>
+                    <h4 class="h4-arvore">{{ folhasCota }} {{ folhasCota == 1 ? 'cota' : 'cotas' }}
+                        <span class="d-inline-block" style="font-size: large; cursor: pointer;" @click="openModalInformacao">
+                            <i style="color: #e3de3a" class="fa-solid fa-circle-info"></i>
+                        </span>
 
-</div> -->
+                    </h4>
+                </figure>
+
                 <div class="d-flex m-3 justify-content-center">
                     <button type="button" @click="openModalAdquirir" class="btn btn-cota text-decoration-underline">Adquirir
                         cota</button>
                     <button type="button" @click="openModalPresentear"
                         class="btn btn-cota text-decoration-underline">Presentear</button>
-
                 </div>
-
-                <div v-if="showCardAdquirir">
-                    <div class="modal-body">
-
-                        <h5 class="text-center titulo-modal">Quantas cotas você quer adquirir?</h5>
-                        <div class="btn-number text-center">
-                            <button type="button" @click="cota.cotas--" class="btn btn-plus">-</button>
-                            <input type="number" class="input-number" v-model="cota.cotas" min="0" max="10">
-                            <button type="button" @click="cota.cotas++" class="btn btn-plus">+</button>
-                        </div>
-                        <div class="text-center">
-                            <button type="button" class="btn btn-adquirir">Adquirir</button>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div v-if="showCardPresentear">
-                    <form @submit.prevent="submit" class="modal-body">
-
-                        <h5 class="text-center titulo-modal">Quem você quer presentear?</h5>
-                        <div class="btn-number text-center">
-                            <p style="color: red" v-if="cota.errors.nome">{{ cota.errors.nome }}</p>
-                            <input type="text" class="input-text" placeholder="Informe o nome" v-model="cota.enviar.nome">
-                            <p style="color: red" v-if="cota.errors.email">{{ cota.errors.email }}</p>
-                            <input type="email" class="input-text" placeholder="Informe o email"
-                                v-model="cota.enviar.email">
-
-                        </div>
-                        <h5 class="text-center titulo-modal">Com quantas cotas você quer presentear?</h5>
-                        <div class="btn-number text-center">
-                            <p style="color: red">{{ cota.errors.cotas }}</p>
-                            <p style="color: red">{{ cota.errors.cotasMin }}</p>
-                            <button type="button" @click="cota.enviar.cotas--" class="btn btn-plus">-</button>
-                            <input type="number" class="input-number" v-model="cota.enviar.cotas" min="0" max="10">
-                            <button type="button" @click="cota.enviar.cotas++" class="btn btn-plus">+</button>
-                        </div>
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-adquirir">Adquirir</button>
-                        </div>
-
-
-                    </form>
-
-                </div>
-
-                <div style="max-width: 80%; margin-left: 10%;" v-if="isMobile && cota.showCardPresente">
-                    <div style="background-color: #135b2d " class="card">
-                        <div class="modal-body">
-                            <button type="button" class="btn btn-fechar" @click="cota.showCardPresente = false">
-                                <span>&times;</span>
-                            </button>
-                            <h5 class="text-center titulo-modal">Seu presente foi enviado com sucesso</h5>
-                            <div class="btn-number text-center">
-                                <p class="p-modal-presente">A pessoa terá <span>07 dias</span>para confirmar o recebimento
-                                    no
-                                    <br />
-                                    email que enviamos. Caso contrário, devolvemos as cotas para sua conta.
-
-                                </p>
-                            </div>
-
-
-                        </div>
-                    </div>
-                </div>
-
 
 
             </div>
@@ -131,60 +62,74 @@
                     <div class="col-md-6 active col-6 center-arvorometro">
                         <div class="card card-arvorometro">
                             <div class="btn btn-arvorometro">ARVORÔMETRO</div>
+                            <div class="d-flex">
+                                <div class="d-grid m-1">
+                                    <h5 class="card-title text-center titulo-arvorometro ">{{ arvorePlantada }}</h5>
+                                    <h6 class="card-subtitle mb-2 text-body-secondary text-center subtitulo-arvorometro">
+                                        Árvores para plantar</h6>
+                                </div>
+                                <div class="d-grid m-1">
+                                    <h5 class="card-title text-center titulo-arvorometro ">{{ cota.data.QuantidadeResgatada
+                                    }}</h5>
+                                    <h6 class="card-subtitle mb-2 text-body-secondary text-center subtitulo-arvorometro">
+                                        Árvores
+                                        plantadas</h6>
+                                </div>
+                            </div>
 
-                            <h5 class="card-title text-center titulo-arvorometro ">{{ arvorePlantada }}</h5>
-                            <h6 class="card-subtitle mb-2 text-body-secondary text-center subtitulo-arvorometro">Árvores
-                                plantadas</h6>
+
+
                         </div>
                     </div>
                     <div class="col-6 col-md-6">
-                        <div class="nuvem-branca">
+                        <!-- <div class="nuvem-branca">
                             <div class="speech-bubble-2">
-                                <p>Em cada <span>viagem,</span> temos a oportunidade <br> de transformar nossa jornada em
-                                    uma <br><span>floresta de esperança💛</span>
+                                <p>Em cada <span>viagem,</span> temos a oportunidade de transformar nossa jornada em
+                                    uma <span>floresta de esperança💛</span>
                                 </p>
                             </div>
 
+                        </div> -->
+                        <div class="balao">
+                            <div class="ponta"></div>
+                            <div class="conteudo">
+                                <p class="conteudo">Em cada <span style="font-weight: bold;">viagem</span>, temos a
+                                    oportunidade de transformar nossa jornada em uma <span
+                                        style="font-weight: bold;">floresta de esperança💛</span>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-12 col-map">
                     <div class="col-12">
-                        <div class="btn btn-confira " style="pointer-events: none;">Veja as áreas de plantio do projeto
+                        <div class="btn card-veja " style="pointer-events: none;">
+                            <span>Veja abaixo às áreas de plantio</span>
+                            <p class="mt-2">Abaixo você confere os locais de plantio do projeto Passagem Verde e o mapa com
+                                a localização das árvores.</p>
                         </div>
                     </div>
 
                     <div class="text-center p-t-12 d-flex align-items-center flex-column">
-
-
                         <div class="carousel-container">
-
-                            <div v-for="(item, index) in cota.data.Projeto" :key="index" class="carousel"
-                                :class="{ 'active': index === cota.currentIndex }">
-                                <img :src="item.UrlImagem" alt="Slide Image">
+                            <div class="carousel h-100 active">
+                                <img :src="cota.data.Projeto[cota.currentIndex].UrlImagem" alt="Slide Image">
                             </div>
                             <button class="prev" @click="prevSlide()">&#10094;</button>
                             <button class="next" @click="nextSlide()">&#10095;</button>
-
                         </div>
                         <div class="col-12 mt-2">
                             <h4 class="h4-nome-projeto">{{ cota.data.Projeto[cota.currentIndex].NomeProjeto }}</h4>
                             <a :href="cota.data.Projeto[cota.currentIndex].UrlSite" target="_blank"
-                                class="p-nome-projeto">Ver no mapa</a>
+                                class="p-nome-projeto">Ver o mapa dos locais de plantio</a>
                         </div>
-
                     </div>
-
-
-
                 </div>
-
-
-
             </div>
         </div>
     </div>
+    <modal-informacao />
     <modal-adquirir />
     <modal-pix />
     <modal-credito />
@@ -196,7 +141,7 @@
 <script>
 import { useUsuarioStore } from "@/stores/UserStore";
 import { ref, watch } from "vue";
-import { computed, onMounted, onBeforeUnmount } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useCotaStore } from "@/stores/CotaStore";
 import modalNotificacao from '@/components/modal/modalNotificacao.vue';
 import modalPresentar from '@/components/modal/modalPresentar.vue';
@@ -205,6 +150,7 @@ import modalCredito from '@/components/modal/modalCredito.vue';
 import navHeader from '@/components/geral/navHeader.vue';
 import ModalAdquirir from '@/components/modal/modalAdquirir.vue';
 import ModalPix from '@/components/modal/modalPix.vue';
+import ModalInformacao from '@/components/modal/modalInformacao.vue';
 
 
 export default {
@@ -217,7 +163,8 @@ export default {
         modalSucesso,
         ModalAdquirir,
         modalCredito,
-        ModalPix
+        ModalPix,
+        ModalInformacao
     },
 
     setup() {
@@ -231,18 +178,19 @@ export default {
         const cota = useCotaStore();
 
         const arvorePlantada = computed(() => {
-            const resultado = cota.data.QuantidadeCotas / 20;
+            const resultado = (cota.data.QuantidadeCotas / 20) - cota.data.QuantidadeResgatada;
             return Math.trunc(resultado);
         });
 
         const folhasCota = computed(() => cota.data.QuantidadeCotas % 20);
 
-        const checkIfMobile = () => {
-            cota.isMobile = window.innerWidth <= 768;
-        };
 
         const openModalAdquirir = () => {
             cota.showModalAdquirir = true;
+            document.body.classList.add('modal-open');
+        };
+        const openModalInformacao = () => {
+            cota.showModalInformacao = true;
             document.body.classList.add('modal-open');
         };
 
@@ -267,15 +215,10 @@ export default {
 
 
         onMounted(() => {
-            window.addEventListener('resize', checkIfMobile);
-            checkIfMobile();
             cota.getUser();
             cota.getPresente();
         });
 
-        onBeforeUnmount(() => {
-            window.removeEventListener('resize', checkIfMobile);
-        });
 
         const showCardAdquirirMobile = () => {
             cota.showCardAdquirir = true;
@@ -292,44 +235,25 @@ export default {
         };
 
         const updateCota = (newData) => {
-            // Lógica para atualizar a tabela
-            console.log('Tabela atualizada');
-            // Define a variável CotaAlterados como true
-
             cota.data = newData;
-
-            console.log(cota.data)
         };
 
         const updateNotifi = (newData) => {
-            // Lógica para atualizar a tabela
-            console.log('Tabela atualizada');
-            // Define a variável CotaAlterados como true
-
             cota.notification = newData;
-
-            console.log( cota.notification )
         };
 
 
         watch(
             () => cota.data,
-            (newData, oldData) => {
-                // Lógica a ser executada quando cota.data mudar
-                console.log('Cota alterados:', newData, oldData);
-
+            (newData,) => {
                 updateCota(newData);
-
             }
         );
 
         watch(
             () => cota.notification.cota,
-            (newData, oldData) => {
-                // Lógica a ser executada quando cota.data mudar
-                console.log('Dados alterados:', newData, oldData);
+            (newData,) => {
                 updateNotifi(newData)
-
             }
         );
 
@@ -339,14 +263,14 @@ export default {
             cota,
             arvorePlantada,
             folhasCota,
-            checkIfMobile,
             openModalAdquirir,
             nextSlide,
             prevSlide,
             showCardAdquirirMobile,
             showCardPresentearMobile,
             openModalNotificacao,
-            openModalPresentear
+            openModalPresentear,
+            openModalInformacao
         };
     },
 };
@@ -359,7 +283,7 @@ export default {
     height: 160px;
     overflow: hidden;
     border-radius: 60px;
-    margin-top: 10%;
+    margin-top: 5%;
 }
 
 .carousel {
@@ -409,5 +333,4 @@ export default {
 
 .next {
     right: 0;
-}
-</style>
+}</style>

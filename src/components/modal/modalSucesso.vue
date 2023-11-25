@@ -12,7 +12,7 @@
                     <div class="btn-number text-center">
                         <p class="p-modal-presente m-3">A pessoa terá <span>07 dias</span> para confirmar o recebimento no
                             <br />
-                            email que enviamos. Caso contrário, devolvemos as cotas para sua conta.
+                            email e notificação que enviamos. Caso contrário, devolvemos as cotas para sua conta.
 
                         </p>
                     </div>

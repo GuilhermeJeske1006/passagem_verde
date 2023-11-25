@@ -35,6 +35,7 @@ export const useCotaStore = defineStore("cota", {
       showNotificacao: false,
       showMetodoPagamento: false,
       showCardPix: false,
+      showModalInformacao: false,
       credito: {
         nome: "",
         bandeira: "",
@@ -177,6 +178,7 @@ export const useCotaStore = defineStore("cota", {
           return response.json();
         })
         .then((responseData) => {
+          this.openModalPresente()
           console.log(responseData);
         })
         .catch((error) => {
@@ -330,6 +332,10 @@ export const useCotaStore = defineStore("cota", {
             document.body.classList.remove('modal-open');
 
         },
+        openModalPresente() {
+          this.showModalPresente = true;
+          document.body.classList.add('modal-open');
+      },
   },
 
   getters: {},

@@ -11,8 +11,8 @@
                     <h5 class="text-center titulo-modal">Quantas cotas você quer adquirir?</h5>
                     <div class="btn-number text-center">
                         <p class="text-danger" v-if="cota.errors.cotaAquirir">{{ cota.errors.cotaAquirir }}</p>
-                        <button type="button" @click="cota.cotas--" class="btn btn-plus">-</button>
-                        <input type="number" class="input-number" v-model="cota.cotas" min="2" >
+                        <button type="button" @click="cota.cotas > 0 ? cota.cotas--  : cota.cotas = 0" class="btn btn-plus">-</button>
+                        <input type="number"  class="input-number" v-model="cota.cotas" min="2" >
                         <button type="button" @click="cota.cotas++" class="btn btn-plus">+</button>
 
                         <br>
@@ -33,7 +33,7 @@
                     <button type="button" class="btn" @click="closeModalAdquirir">
                         <span>&times;</span>
                     </button>
-                    <h5 class="text-center titulo-modal">Selecione o sue metodo de pagamento</h5>
+                    <h5 class="text-center titulo-modal">Selecione o seu método de pagamento</h5>
                     <div class="btn-number text-center m-5">
                         <div class="text-danger" v-if="cota.errors.metodoPreencher">{{ cota.errors.metodoPreencher }}</div>
                         <div class="form-group d-flex m-2">
@@ -41,14 +41,16 @@
                                 type="checkbox" name="pass" placeholder="Sua Senha">
                             <p class="font-weight-medium ml-5 mr-5" style="    margin-left: 10px;">Pix</p>
                         </div>
+                       
                         <div class="form-group d-flex m-2">
+                           
                             <input class="ml-5 mr-5" @change="checkCheckbox" v-model="cota.metodo.credito" value="true"
                                 type="checkbox" name="pass" placeholder="Sua Senha">
-                            <p class="font-weight-medium ml-5 mr-5" style="    margin-left: 10px;">Cartão de credito</p>
+                            <p class="font-weight-medium ml-5 mr-5" style="    margin-left: 10px;">Cartão de crédito</p>
                         </div>
                     </div>
                     <div class="text-center">
-                        <button @click="irPagamento" class="btn btn-adquirir">Proximo</button>
+                        <button @click="irPagamento" class="btn btn-adquirir">Próximo</button>
                     </div>
 
 
@@ -69,6 +71,9 @@ export default {
     setup() {
         const cota = useCotaStore()
 
+
+        
+
         const submitAdquirir = () => {
             if (cota.cotas < 2) {
                 cota.errors.cotaAquirir = 'O valor da cota não pode ser menor que dois';
@@ -86,7 +91,7 @@ export default {
             return total.toFixed(2);
         });
 
-
+        
 
 
         const checkCheckbox = () => {
@@ -142,7 +147,7 @@ export default {
             irPagamento,
             openModalPix,
             openModalCredito,
-            valorTotal
+            valorTotal,
         }
     },
 }

@@ -8,13 +8,11 @@
 
                         <div class="col-md-5">
                             <div class="login100-pic js-tilt" data-tilt>
-                                <img src="@/assets/logo.png" style="
-    margin-bottom: 57%;
-" alt="IMG">
+                                <img src="@/assets/logo.png" style="margin-bottom: 57%;" alt="IMG">
                                      <a href="https://plantacao.s3.amazonaws.com/regulamento.html" class=" text-decoration-none" target="_blank" rel="noopener noreferrer">
                                         <span class="span-requisitos text-base mt-5">
 
-                                        Veja aqui o regulamento:
+                                        Veja aqui o regulamento
                                     </span>
 
                                      </a>
@@ -116,7 +114,7 @@
                                 <div class="form-group">
                                     <div class="wrap-input100 validate-input">
                                             <input class="input100" v-model="usuario.cadastro.whatsapp" type="text"
-                                                name="pass" @input="formatarTelefone" placeholder="Seu Whatsapp">
+                                               name="tel" @input="formatarTelefone" placeholder="Seu Whatsapp">
                                             <span class="focus-input100"></span>
                                             <span class="symbol-input100">
                                                 <i class="fa fa-whatsapp" aria-hidden="true"></i>
@@ -134,7 +132,9 @@
                                     </div>
                                 </div> -->
 
+
                                 <div class="form-group d-flex m-3">
+                                        <p class="text-danger" v-if="errors.aceite">{{ errors.aceite }}</p>
                                         <input class="ml-5 mr-5"  v-model="usuario.cadastro.aceite"
                                             type="checkbox" name="pass" placeholder="Sua Senha">
                                         <p class="font-weight-medium ml-5 mr-5" style="    margin-left: 10px;">Eu li e concordo com os
@@ -144,14 +144,23 @@
                                              >Política de Privacidade</a></p>
                                 </div>
 
-                              
-
+                                
 
                                 <div class=" container-login100-form-btn">
                                     
                                     <button type="submit" class="login100-form-btn">
                                         Registrar
                                     </button>
+                                </div>
+
+                                <div class="form-group m-3 d-md-none justify-content-end text-end pt-2">
+                                    <a href="https://plantacao.s3.amazonaws.com/regulamento.html" class=" text-decoration-underline" target="_blank" rel="noopener noreferrer">
+                                        <span class="span-requisitos text-base mt-5">
+
+                                        Veja aqui o regulamento
+                                    </span>
+
+                                     </a>
                                 </div>
                             </form>
                         </div>
@@ -185,22 +194,21 @@ export default {
             aceite: ''
         })
 
-        const telefone = ref(usuario.cadastro.whatsapp);
 
 
         const formatarTelefone = () => {
-            let telefoneLimpo = telefone.value.replace(/\D/g, '');
+            let telefoneLimpo = usuario.cadastro.whatsapp.replace(/\D/g, '');
 
             if (telefoneLimpo.length === 11) {
-                telefone.value = `(${telefoneLimpo.slice(0, 2)}) ${telefoneLimpo.slice(2, 7)}-${telefoneLimpo.slice(7)}`;
+                usuario.cadastro.whatsapp = `(${telefoneLimpo.slice(0, 2)}) ${telefoneLimpo.slice(2, 7)}-${telefoneLimpo.slice(7)}`;
             } else if (telefoneLimpo.length === 10) {
-                telefone.value = `(${telefoneLimpo.slice(0, 2)}) ${telefoneLimpo.slice(2, 6)}-${telefoneLimpo.slice(6)}`;
+                usuario.cadastro.whatsapp = `(${telefoneLimpo.slice(0, 2)}) ${telefoneLimpo.slice(2, 6)}-${telefoneLimpo.slice(6)}`;
             } else {
-                telefone.value = telefoneLimpo;
+                usuario.cadastro.whatsapp = telefoneLimpo;
             }
             };
 
-                watch(telefone, formatarTelefone);
+            watch(formatarTelefone);
 
 
         const validatePassword = () => {
@@ -250,7 +258,7 @@ export default {
                     errors.value.email = 'Por favor! Preencha o campo email'
                 }
                 if(usuario.cadastro.aceite == false){
-                    errors.value.email = 'Por favor! Selecione os termos de aceite!'
+                    errors.value.aceite = 'Por favor! Selecione os termos de aceite!'
                 }
                 
                 // if (usuario.cadastro.senha == '') {

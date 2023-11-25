@@ -9,7 +9,7 @@
                     </button>
                     <h5 class="text-center titulo-modal">Quem você quer presentear?</h5>
                     <div class="btn-number text-center">
-                        <p style="color: red" v-if="cota.errors.nome">{{ cota.errors.nome }}</p>
+                        <p class="text-danger" v-if="cota.errors.nome">{{ cota.errors.nome }}</p>
                         <div class="wrap-input100 validate-input">
                             <input class="input100" placeholder="Informe o nome" v-model="cota.enviar.nome" type="text">
                             <span class="focus-input100"></span>
@@ -17,7 +17,7 @@
                                 <i class="fa fa-user-circle" aria-hidden="true"></i>
                             </span>
                         </div>
-                        <p style="color: red" v-if="cota.errors.email">{{ cota.errors.email }}</p>
+                        <p class="text-danger" v-if="cota.errors.email">{{ cota.errors.email }}</p>
                         <div class="wrap-input100 validate-input" data-validate="Password is required">
                             <input class="input100" placeholder="Informe o email" v-model="cota.enviar.email" type="email">
                             <span class="focus-input100"></span>
@@ -28,11 +28,11 @@
                     </div>
                     <h5 class="text-center titulo-modal">Com quantas cotas você quer presentear?</h5>
                     <div class="btn-number text-center">
-                        <p style="color: red">{{ cota.errors.cotas }}</p>
-                        <p style="color: red">{{ cota.errors.cotasMin }}</p>
-                        <p style="color: red">{{ cota.errors.faltaCota }}</p>
+                        <p class="text-danger">{{ cota.errors.cotas }}</p>
+                        <p class="text-danger">{{ cota.errors.cotasMin }}</p>
+                        <p class="text-danger">{{ cota.errors.faltaCota }}</p>
 
-                        <button type="button" @click="cota.enviar.cotas--" class="btn btn-plus">-</button>
+                        <button type="button" @click="cota.enviar.cotas > 0 ? cota.enviar.cotas-- : cota.enviar.cotas = 0" class="btn btn-plus">-</button>
                         <input type="number" class="input-number" v-model="cota.enviar.cotas" min="0" max="10000">
                         <button type="button" @click="cota.enviar.cotas++" class="btn btn-plus">+</button>
                     </div>
@@ -59,7 +59,7 @@ export default {
 
             try{
                 closeModalPresentear();
-                openModalPresente();
+                // openModalPresente();
                  cota.postPresente();
                  cota.getPresente();
                  cota.getUser()
@@ -107,13 +107,9 @@ export default {
             document.body.classList.remove('modal-open');
         };
 
-        const openModalPresente = () => {
-            cota.showModalPresente = true;
-            document.body.classList.add('modal-open');
-        };
+       
         return {
             cota,
-            openModalPresente,
             closeModalPresentear,
             submit
         }
