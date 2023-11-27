@@ -143,7 +143,7 @@ export default {
                 erroNewPassword.value.erroSimbolo = "";
             } else {
                 erroNewPassword.value.erroSimbolo =
-                    "A senha deve conter pelo menos um símbolo ou caractere de especial.";
+                    "A senha deve conter pelo menos um símbolo ou caractere especial.";
             }
         }
 

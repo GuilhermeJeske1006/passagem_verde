@@ -132,9 +132,9 @@ export default {
             if (cota.credito.nome != '' && cota.credito.cpf != '' &&
                 cota.credito.numero_cartao != '' && cota.credito.cvv != ''
                 && cota.credito.mes != '' && cota.credito.ano != '' && cota.credito.cpf.length == 14
-                 && cota.credito.mes.length == 2 && cota.credito.ano.length && cota.credito.numero_cartao.length == 19
+                 && cota.credito.mes.length == 2 && cota.credito.ano.length == 4 && cota.credito.numero_cartao.length == 19
                  && cota.credito.cvv.length == 3) {
-
+                    console.log('entrou primeiro')
                     errors.value.cpf= ''
                     errors.value.numero_cartao= ''
                     errors.value.cvv= ''
@@ -146,6 +146,7 @@ export default {
                         .verifyCardBrand()
                         .then(brand => {
                             cota.credito.bandeira = brand
+                            console.log('entrou segundo', brand)
 
                             if (brand !== 'undefined') {
                                 try {
@@ -172,6 +173,9 @@ export default {
                                     useToast().error(error.error_description)
                                 }
                             }
+                            else{
+                                useToast().error("Bandeira do cartão não encontrada!")
+                            }
                         }).catch(err => {
                             useToast().error(err.error_description)
                         });
@@ -179,12 +183,13 @@ export default {
                     useToast().error(error.error_description)
                 }
             }else {
+
                 if(cota.credito.cpf.length != 14){
                     errors.value.cpf = 'O campo não corresponde aos número de caracteres necessários para o cpf'
                 }
                 if(cota.credito.mes.length != 2){
                     errors.value.mes = 'O campo não corresponde aos número de caracteres necessários para o Mês'
-                }
+                } 
                 if(cota.credito.ano.length != 4){
                     errors.value.ano = 'O campo não corresponde aos número de caracteres necessários para o Ano'
                 }
@@ -203,6 +208,12 @@ export default {
             if (cota.credito.cpf != '') {
                 let cpfLimpo = cota.credito.cpf.replace(/\D/g, '');
 
+                if(cota.credito.cpf.length != 14){
+                    errors.value.cpf = 'O campo não corresponde aos número de caracteres necessários para o cpf'
+                }else{
+                    errors.value.cpf = ''
+                }
+
                 if (cpfLimpo.length >= 3 && cpfLimpo.length <= 5) {
                     cota.credito.cpf = `${cpfLimpo.slice(0, 3)}.${cpfLimpo.slice(3)}`;
                 } else if (cpfLimpo.length >= 6 && cpfLimpo.length <= 8) {
@@ -219,6 +230,12 @@ export default {
         const formatarNumberCard = () => {
             if (cota.credito.numero_cartao != '') {
                 let card_limpo = cota.credito.numero_cartao.replace(/\D/g, '');
+
+                if(cota.credito.numero_cartao.length != 19){
+                    errors.value.numero_cartao = 'O campo não corresponde aos número de caracteres necessários para o Número do cartão'
+                }else{
+                    errors.value.numero_cartao =  ''
+                }
                 if (card_limpo.length >= 4 && card_limpo.length <= 8) {
                     cota.credito.numero_cartao = `${card_limpo.slice(0, 4)} ${card_limpo.slice(4)}`;
                 } else if (card_limpo.length >= 9 && card_limpo.length <= 13) {
@@ -236,6 +253,11 @@ export default {
 
         const formatarCvv = () => {
             if (cota.credito.cvv != '') {
+                if(cota.credito.cvv.length != 3){
+                    errors.value.cvv = 'O campo não corresponde aos número de caracteres necessários para o CVV'
+                }else{
+                    errors.value.cvv = ''
+                }
                 let formattedCVV = cota.credito.cvv.replace(/\D/g, '');
                 formattedCVV = formattedCVV.slice(0, 3);
                 cota.credito.cvv = formattedCVV;
@@ -245,6 +267,12 @@ export default {
 
         const formatarMes = () => {
             if (cota.credito.mes != '') {
+
+                if(cota.credito.mes.length != 2){
+                    errors.value.mes = 'O campo não corresponde aos número de caracteres necessários para o Mês'
+                } else{
+                    errors.value.mes = ''
+                }
                 let formattedMes = cota.credito.mes.replace(/\D/g, '');
                 formattedMes = formattedMes.slice(0, 2);
                 cota.credito.mes = formattedMes;
@@ -254,6 +282,11 @@ export default {
 
         const formatarAno = () => {
             if (cota.credito.ano != '') {
+                if(cota.credito.ano.length != 4){
+                    errors.value.ano = 'O campo não corresponde aos número de caracteres necessários para o Ano'
+                }else{
+                    errors.value.ano = ''
+                }
                 let formattedAno = cota.credito.ano.replace(/\D/g, '');
                 formattedAno = formattedAno.slice(0, 4);
                 cota.credito.ano = formattedAno;

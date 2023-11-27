@@ -56,8 +56,11 @@
                     <button type="button" @click="openModalPresentear"
                         class="btn btn-cota text-decoration-underline">Presentear</button>
                 </div>
+            
+                <div class="text-center">
+                    <h4 class="h4-arvore" style="font-size: 25px;color: #000;">Total de cotas: {{ cota.data.QuantidadeCotas }}</h4>
 
-
+                </div>
             </div>
             <div class="col-md-6 col-12 col-arvorometro">
                 <div class="col-12 d-flex" style="margin-top: 13%;">
