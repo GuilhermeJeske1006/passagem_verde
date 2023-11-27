@@ -13,9 +13,10 @@
                     <h5 class="text-center titulo-modal">Informe os seus dados abaixo</h5>
                     <br />
                     <div class="form-group">
+                        <p class="text-danger m-3 mt-4 mb-1" v-if="errors.nome != ''">{{ errors.nome }}</p>
                         <div class="wrap-input100 validate-input">
-                            <input class="input100" v-model="cota.credito.nome" type="text" required name="pass"
-                                id="nome_cartao" placeholder="Nome no cartão">
+                            <input class="input100" v-model="cota.credito.nome" @input="formatarNome" type="text" required
+                                name="pass" id="nome_cartao" placeholder="Nome no cartão">
                             <span class="focus-input100"></span>
                             <span class="symbol-input100">
                                 <i class="fa fa-user-circle" aria-hidden="true"></i>
@@ -49,7 +50,8 @@
 
                     </div> -->
                     <div class="form-group">
-                        <p class="text-danger m-3 mt-4 mb-1" v-if="errors.numero_cartao != ''">{{ errors.numero_cartao }}</p>
+                        <p class="text-danger m-3 mt-4 mb-1" v-if="errors.numero_cartao != ''">{{ errors.numero_cartao }}
+                        </p>
                         <div class="wrap-input100 validate-input">
                             <input @input="formatarNumberCard" class="input100" v-model="cota.credito.numero_cartao"
                                 type="text" required name="pass" id="numero_cartao" placeholder="Número do cartão">
@@ -71,7 +73,7 @@
                         </div>
                     </div>
                     <div class="form-row d-flex">
-                        
+
                         <div class="form-group col-md-6">
                             <p class="text-danger m-3 mt-4 mb-1" v-if="errors.mes != ''">{{ errors.mes }}</p>
 
@@ -99,7 +101,8 @@
                     </div>
 
                     <div class="row justify-content-center">
-                        <button type="submit" class="btn btn-adquirir" style="width: 60%; padding: 10px 1rem 10px 1rem;">Finalizar Pagamento</button>
+                        <button type="submit" class="btn btn-adquirir"
+                            style="width: 60%; padding: 10px 1rem 10px 1rem;">Finalizar Pagamento</button>
                     </div>
 
                 </form>
@@ -124,29 +127,30 @@ export default {
             cvv: '',
             ano: '',
             mes: '',
-
+            nome: ''
 
         })
 
         const pagarCredito = () => {
+            const partesNome = cota.credito.nome.split(' ');
             if (cota.credito.nome != '' && cota.credito.cpf != '' &&
                 cota.credito.numero_cartao != '' && cota.credito.cvv != ''
                 && cota.credito.mes != '' && cota.credito.ano != '' && cota.credito.cpf.length == 14
-                 && cota.credito.mes.length == 2 && cota.credito.ano.length == 4 && cota.credito.numero_cartao.length == 19
-                 && cota.credito.cvv.length == 3) {
-                    console.log('entrou primeiro')
-                    errors.value.cpf= ''
-                    errors.value.numero_cartao= ''
-                    errors.value.cvv= ''
-                    errors.value.ano= ''
-                    errors.value.mes= ''
+                && cota.credito.mes.length == 2 && cota.credito.ano.length == 4 && cota.credito.numero_cartao.length == 19
+                && cota.credito.cvv.length == 3 && partesNome.length > 1) {
+                errors.value.cpf = ''
+                errors.value.numero_cartao = ''
+                errors.value.cvv = ''
+                errors.value.ano = ''
+                errors.value.mes = ''
+                errors.value.nome = ''
+
                 try {
                     window.EfiJs.CreditCard
                         .setCardNumber(cota.credito.numero_cartao.toString())
                         .verifyCardBrand()
                         .then(brand => {
                             cota.credito.bandeira = brand
-                            console.log('entrou segundo', brand)
 
                             if (brand !== 'undefined') {
                                 try {
@@ -173,7 +177,7 @@ export default {
                                     useToast().error(error.error_description)
                                 }
                             }
-                            else{
+                            else {
                                 useToast().error("Bandeira do cartão não encontrada!")
                             }
                         }).catch(err => {
@@ -182,25 +186,42 @@ export default {
                 } catch (error) {
                     useToast().error(error.error_description)
                 }
-            }else {
+            } else {
 
-                if(cota.credito.cpf.length != 14){
+                if (cota.credito.cpf.length != 14) {
                     errors.value.cpf = 'O campo não corresponde aos número de caracteres necessários para o cpf'
                 }
-                if(cota.credito.mes.length != 2){
+                if (cota.credito.mes.length != 2) {
                     errors.value.mes = 'O campo não corresponde aos número de caracteres necessários para o Mês'
-                } 
-                if(cota.credito.ano.length != 4){
+                }
+                if (cota.credito.ano.length != 4) {
                     errors.value.ano = 'O campo não corresponde aos número de caracteres necessários para o Ano'
                 }
-                if(cota.credito.numero_cartao.length != 19){
+                if (cota.credito.numero_cartao.length != 19) {
                     errors.value.numero_cartao = 'O campo não corresponde aos número de caracteres necessários para o Número do cartão'
                 }
-                if(cota.credito.cvv.length != 3){
+                if (cota.credito.cvv.length != 3) {
                     errors.value.cvv = 'O campo não corresponde aos número de caracteres necessários para o CVV'
                 }
-             
+                if (partesNome.length < 2) {
+                    errors.value.nome = 'Por favor, insira o nome completo.';
+                } else {
+                    errors.value.nome = '';
+                }
             }
+        };
+
+        const formatarNome = () => {
+            if (cota.credito.nome != '') {
+                const partesNome = cota.credito.nome.split(' ');
+
+                if (partesNome.length < 2) {
+                    errors.value.nome = 'Por favor, insira o nome completo.';
+                } else {
+                    errors.value.nome = '';
+                }
+            }
+
         };
 
 
@@ -208,9 +229,9 @@ export default {
             if (cota.credito.cpf != '') {
                 let cpfLimpo = cota.credito.cpf.replace(/\D/g, '');
 
-                if(cota.credito.cpf.length != 14){
+                if (cota.credito.cpf.length != 14) {
                     errors.value.cpf = 'O campo não corresponde aos número de caracteres necessários para o cpf'
-                }else{
+                } else {
                     errors.value.cpf = ''
                 }
 
@@ -231,10 +252,10 @@ export default {
             if (cota.credito.numero_cartao != '') {
                 let card_limpo = cota.credito.numero_cartao.replace(/\D/g, '');
 
-                if(cota.credito.numero_cartao.length != 19){
+                if (cota.credito.numero_cartao.length != 19) {
                     errors.value.numero_cartao = 'O campo não corresponde aos número de caracteres necessários para o Número do cartão'
-                }else{
-                    errors.value.numero_cartao =  ''
+                } else {
+                    errors.value.numero_cartao = ''
                 }
                 if (card_limpo.length >= 4 && card_limpo.length <= 8) {
                     cota.credito.numero_cartao = `${card_limpo.slice(0, 4)} ${card_limpo.slice(4)}`;
@@ -253,9 +274,9 @@ export default {
 
         const formatarCvv = () => {
             if (cota.credito.cvv != '') {
-                if(cota.credito.cvv.length != 3){
+                if (cota.credito.cvv.length != 3) {
                     errors.value.cvv = 'O campo não corresponde aos número de caracteres necessários para o CVV'
-                }else{
+                } else {
                     errors.value.cvv = ''
                 }
                 let formattedCVV = cota.credito.cvv.replace(/\D/g, '');
@@ -268,9 +289,9 @@ export default {
         const formatarMes = () => {
             if (cota.credito.mes != '') {
 
-                if(cota.credito.mes.length != 2){
+                if (cota.credito.mes.length != 2) {
                     errors.value.mes = 'O campo não corresponde aos número de caracteres necessários para o Mês'
-                } else{
+                } else {
                     errors.value.mes = ''
                 }
                 let formattedMes = cota.credito.mes.replace(/\D/g, '');
@@ -282,9 +303,9 @@ export default {
 
         const formatarAno = () => {
             if (cota.credito.ano != '') {
-                if(cota.credito.ano.length != 4){
+                if (cota.credito.ano.length != 4) {
                     errors.value.ano = 'O campo não corresponde aos número de caracteres necessários para o Ano'
-                }else{
+                } else {
                     errors.value.ano = ''
                 }
                 let formattedAno = cota.credito.ano.replace(/\D/g, '');
@@ -299,6 +320,8 @@ export default {
         watch(formatarCvv)
         watch(formatarAno)
         watch(formatarMes)
+        watch(formatarNome)
+
 
         return {
             cota,

@@ -378,6 +378,16 @@
     font-weight: bold;
 }
 
+.btn-copiar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    margin: 12px;
+    border: 1px solid #000;
+    height: 40px;
+}
+
 .image_nome {
     position: absolute;
     top: 0;
