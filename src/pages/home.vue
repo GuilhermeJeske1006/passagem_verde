@@ -13,7 +13,8 @@
 
                 <div class="nuvem">
                     <div class="speech-bubble">
-                        <p class="p-speech">Faltam apenas <span class="font-bold">{{ 20 - folhasCota }} {{ 20 - folhasCota == 1 ? 'cota' : 'cotas' }}</span><br>
+                        <p class="p-speech">Faltam apenas <span class="font-bold">{{ 20 - folhasCota }} {{ 20 - folhasCota
+                            == 1 ? 'cota' : 'cotas' }}</span><br>
                             para você plantar sua <br> árvore!</p>
                     </div>
                 </div>
@@ -41,7 +42,8 @@
                     <img v-if="folhasCota == 0" src="@/assets/folhas/arvore0.png" class=" img-arvore" alt="">
 
                     <h4 class="h4-arvore">{{ folhasCota }} {{ folhasCota == 1 ? 'cota' : 'cotas' }}
-                        <span class="d-inline-block" style="font-size: large; cursor: pointer;" @click="openModalInformacao">
+                        <span class="d-inline-block" style="font-size: large; cursor: pointer;"
+                            @click="cota.openModalInformacao">
                             <i style="color: #e3de3a" class="fa-solid fa-circle-info"></i>
                         </span>
 
@@ -82,14 +84,7 @@
                         </div>
                     </div>
                     <div class="col-6 col-md-6">
-                        <!-- <div class="nuvem-branca">
-                            <div class="speech-bubble-2">
-                                <p>Em cada <span>viagem,</span> temos a oportunidade de transformar nossa jornada em
-                                    uma <span>floresta de esperança💛</span>
-                                </p>
-                            </div>
 
-                        </div> -->
                         <div class="balao">
                             <div class="ponta"></div>
                             <div class="conteudo">
@@ -129,7 +124,8 @@
             </div>
         </div>
     </div>
-    <modal-informacao />
+    <modal-informacao
+        :text="'Ao finalizar as 20 cotas, sua árvore será contabilizado no Arvorômetro, zerando o painel de cotas para aquisição de uma nova árvore'" />
     <modal-adquirir />
     <modal-pix />
     <modal-credito />
@@ -189,10 +185,7 @@ export default {
             cota.showModalAdquirir = true;
             document.body.classList.add('modal-open');
         };
-        const openModalInformacao = () => {
-            cota.showModalInformacao = true;
-            document.body.classList.add('modal-open');
-        };
+
 
         const openModalPresentear = () => {
             cota.showModalPresentear = true
@@ -217,6 +210,7 @@ export default {
         onMounted(() => {
             cota.getUser();
             cota.getPresente();
+            console.log(cota)
         });
 
 
@@ -244,16 +238,25 @@ export default {
 
 
         watch(
-            () => cota.data,
-            (newData,) => {
-                updateCota(newData);
+            () => {
+                if (cota.cota != undefined) {
+                    cota.data,
+                        (newData,) => {
+                            updateCota(newData);
+                        }
+                }
             }
         );
 
         watch(
-            () => cota.notification.cota,
-            (newData,) => {
-                updateNotifi(newData)
+            () => {
+                if (cota.notification.cota != undefined) {
+                    cota.notification.cota,
+                        (newData,) => {
+                            updateNotifi(newData)
+                        }
+                }
+
             }
         );
 
@@ -270,7 +273,6 @@ export default {
             showCardPresentearMobile,
             openModalNotificacao,
             openModalPresentear,
-            openModalInformacao
         };
     },
 };

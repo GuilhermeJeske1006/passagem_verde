@@ -1,5 +1,7 @@
 <template>
-    <div class="limiter">
+        <div v-if="usuario.isLoading" class="loading"></div>
+
+    <div v-else class="limiter">
         <div class="container-login100">
             <div class="wrap-login100" style="padding: 26px 27px 43px 40px">
                 <div class="container mt-5">
@@ -168,15 +170,21 @@
                 </div>
             </div>
         </div>
+        <modal-informacao :tela="'register'" :text="'Seu cadastro foi realizado! Por favor verifique o seu email para resgatar a sua senha temporaria!'"/>
     </div>
 </template>
   
 <script>
 import { ref, watch } from 'vue';
 import { useUsuarioStore } from "@/stores/UserStore";
+import ModalInformacao from '@/components/modal/modalInformacao.vue';
 
 export default {
     name: 'RedefinirView',
+
+    components: {
+        ModalInformacao
+    },
     setup() {
         const usuario = useUsuarioStore();
 

@@ -55,7 +55,7 @@ export default {
         const cota = useCotaStore()
 
         const  submit = () => {
-            if (cota.enviar.nome !== '' && cota.enviar.email !== '' && cota.enviar.cotas !== 0 && cota.enviar.cotas >= 1  && cota.enviar.cotas < cota.data.QuantidadeCotas) {
+            if (cota.enviar.nome !== '' && cota.enviar.email !== '' && cota.enviar.cotas !== 0 && cota.enviar.cotas > 0  && cota.enviar.cotas <= cota.data.QuantidadeCotas) {
 
             try{
                 closeModalPresentear();
@@ -63,7 +63,9 @@ export default {
                  cota.postPresente();
                  cota.getPresente();
                  cota.getUser()
-                 cota.enviar = ''
+                 cota.enviar.nome = "",
+                 cota.enviar.email = "",
+                 cota.enviar.cotas = 0
             }catch (error) {
                 console.error('Erro ao aceitar notificações', error);
             }
@@ -93,7 +95,7 @@ export default {
                     cota.errors.cotasMin = '';
 
                 }
-                if(cota.enviar.cotas > cota.data.QuantidadeCotas){
+                if(cota.enviar.cotas >= cota.data.QuantidadeCotas){
                     cota.errors.faltaCota = 'A sua quantidade de cotas é inferior à quantidade que deseja presentear! Adquira mais cotas para prosseguir'
                 }else{
                     cota.errors.faltaCota = ''

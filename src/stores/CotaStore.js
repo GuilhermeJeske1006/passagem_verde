@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import router from "@/router";
 import { useToast } from "vue-toastification";
 
+
 export const useCotaStore = defineStore("cota", {
   state() {
     return {
@@ -274,6 +275,7 @@ export const useCotaStore = defineStore("cota", {
           useToast().success("Seu pagamento está sendo processado! Em breve, as cotas adquiridas estão disponíveis na sua conta.");
           this.getUser()
           this.closeModalCredito()
+          
         })
         .catch((err) => {
           console.error('erro na transacao', err)
@@ -327,6 +329,12 @@ export const useCotaStore = defineStore("cota", {
         },
 
        closeModalCredito () {
+            this.credito.nome = "",
+            this.credito.numero_cartao = "",
+            this.credito.cvv = "",
+            this.credito.mes = "",
+            this.credito.ano = "",
+            this.credito.cpf = "",
             this.showCardCredito = false
             this.closeModalAdquirir()
             document.body.classList.remove('modal-open');
@@ -336,6 +344,11 @@ export const useCotaStore = defineStore("cota", {
           this.showModalPresente = true;
           document.body.classList.add('modal-open');
       },
+
+      openModalInformacao (){
+        this.showModalInformacao = true;
+        document.body.classList.add('modal-open');
+    }
   },
 
   getters: {},

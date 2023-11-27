@@ -7,7 +7,7 @@
                 <div v-if="cota.credito.isLoading" class="loading modal-body"></div>
 
                 <form @submit.prevent="pagarCredito" class="modal-body">
-                    <button type="button" class="btn" @click="closeModalCredito">
+                    <button type="button" class="btn" @click="cota.closeModalCredito">
                         <span>&times;</span>
                     </button>
                     <h5 class="text-center titulo-modal">Informe os seus dados abaixo</h5>
@@ -24,6 +24,7 @@
 
                     </div>
                     <div class="form-group">
+                        <p class="text-danger m-3 mt-4 mb-1" v-if="errors.cpf != ''">{{ errors.cpf }}</p>
                         <div class="wrap-input100 validate-input">
                             <input class="input100" @input="formatarCpf" v-model="cota.credito.cpf" type="text" required
                                 name="cpf" id="cpf" placeholder="Número do Cpf">
@@ -48,7 +49,7 @@
 
                     </div> -->
                     <div class="form-group">
-
+                        <p class="text-danger m-3 mt-4 mb-1" v-if="errors.numero_cartao != ''">{{ errors.numero_cartao }}</p>
                         <div class="wrap-input100 validate-input">
                             <input @input="formatarNumberCard" class="input100" v-model="cota.credito.numero_cartao"
                                 type="text" required name="pass" id="numero_cartao" placeholder="Número do cartão">
@@ -59,7 +60,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-
+                        <p class="text-danger m-3 mt-4 mb-1" v-if="errors.cvv != ''">{{ errors.cvv }}</p>
                         <div class="wrap-input100 validate-input">
                             <input class="input100" @input="formatarCvv" v-model="cota.credito.cvv" type="text" required
                                 name="pass" id="cvv" placeholder="CVV" maxlength="3">
@@ -70,7 +71,9 @@
                         </div>
                     </div>
                     <div class="form-row d-flex">
+                        
                         <div class="form-group col-md-6">
+                            <p class="text-danger m-3 mt-4 mb-1" v-if="errors.mes != ''">{{ errors.mes }}</p>
 
                             <div class="wrap-input100 validate-input">
                                 <input class="input100" @input="formatarMes" v-model="cota.credito.mes" type="text" required
@@ -82,6 +85,7 @@
                             </div>
                         </div>
                         <div class="form-group col-md-6">
+                            <p class="text-danger m-3 mt-4 mb-1" v-if="errors.ano != ''">{{ errors.ano }}</p>
 
                             <div class="wrap-input100 validate-input">
                                 <input class="input100" maxlength="4" @input="formatarAno" v-model="cota.credito.ano"
@@ -107,18 +111,35 @@
 
 <script>
 import { useCotaStore } from "@/stores/CotaStore";
-import { watch } from 'vue';
+import { ref, watch } from 'vue';
+import { useToast } from "vue-toastification";
 
 export default {
     setup() {
         const cota = useCotaStore()
 
+        const errors = ref({
+            cpf: '',
+            numero_cartao: '',
+            cvv: '',
+            ano: '',
+            mes: '',
+
+
+        })
+
         const pagarCredito = () => {
             if (cota.credito.nome != '' && cota.credito.cpf != '' &&
                 cota.credito.numero_cartao != '' && cota.credito.cvv != ''
-                && cota.credito.mes != '' && cota.credito.ano != '') {
+                && cota.credito.mes != '' && cota.credito.ano != '' && cota.credito.cpf.length == 14
+                 && cota.credito.mes.length == 2 && cota.credito.ano.length && cota.credito.numero_cartao.length == 19
+                 && cota.credito.cvv.length == 3) {
 
-
+                    errors.value.cpf= ''
+                    errors.value.numero_cartao= ''
+                    errors.value.cvv= ''
+                    errors.value.ano= ''
+                    errors.value.mes= ''
                 try {
                     window.EfiJs.CreditCard
                         .setCardNumber(cota.credito.numero_cartao.toString())
@@ -141,34 +162,39 @@ export default {
                                         })
                                         .getPaymentToken()
                                         .then(data => {
-                                            console.log(data)
                                             cota.credito.payment_token = data.payment_token;
                                             cota.credito.card_mask = data.card_mask;
                                             cota.postCredito()
-
-                                            console.log('payment_token', cota.credito.payment_token);
-                                            console.log('card_mask', cota.credito.card_mask);
                                         }).catch(err => {
-                                            console.log('Código: ', err.code);
-                                            console.log('Nome: ', err.error);
-                                            console.log('Mensagem: ', err.error_description);
+                                            useToast().error(err.error_description)
                                         });
                                 } catch (error) {
-                                    console.log('Código: ', error.code);
-                                    console.log('Nome: ', error.error);
-                                    console.log('Mensagem: ', error.error_description);
+                                    useToast().error(error.error_description)
                                 }
                             }
                         }).catch(err => {
-                            console.log('Código: ', err.code);
-                            console.log('Nome: ', err.error);
-                            console.log('Mensagem: ', err.error_description);
+                            useToast().error(err.error_description)
                         });
                 } catch (error) {
-                    console.log('Código: ', error.code);
-                    console.log('Nome: ', error.error);
-                    console.log('Mensagem: ', error.error_description);
+                    useToast().error(error.error_description)
                 }
+            }else {
+                if(cota.credito.cpf.length != 14){
+                    errors.value.cpf = 'O campo não corresponde aos número de caracteres necessários para o cpf'
+                }
+                if(cota.credito.mes.length != 2){
+                    errors.value.mes = 'O campo não corresponde aos número de caracteres necessários para o Mês'
+                }
+                if(cota.credito.ano.length != 4){
+                    errors.value.ano = 'O campo não corresponde aos número de caracteres necessários para o Ano'
+                }
+                if(cota.credito.numero_cartao.length != 19){
+                    errors.value.numero_cartao = 'O campo não corresponde aos número de caracteres necessários para o Número do cartão'
+                }
+                if(cota.credito.cvv.length != 3){
+                    errors.value.cvv = 'O campo não corresponde aos número de caracteres necessários para o CVV'
+                }
+             
             }
         };
 
@@ -241,31 +267,10 @@ export default {
         watch(formatarAno)
         watch(formatarMes)
 
-
-
-        const closeModalAdquirir = () => {
-            cota.showModalAdquirir = false
-            cota.metodo.credito = false
-            cota.metodo.pix = false
-            document.body.classList.remove('modal-open');
-        };
-
-        const closeModalCredito = () => {
-            cota.showCardCredito = false
-            closeModalAdquirir()
-            cota.credito = {}
-            document.body.classList.remove('modal-open');
-
-        }
-
-        const getBandeira = () => {
-
-        }
         return {
             cota,
-            closeModalCredito,
-            getBandeira,
             pagarCredito,
+            errors
         }
     },
 }
