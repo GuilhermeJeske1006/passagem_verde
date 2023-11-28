@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="background: #fff;">
         <nav class="navbar">
             <div class="container-fluid d-md-none" >
                 <div class="col-12 d-flex">

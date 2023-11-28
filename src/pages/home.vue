@@ -1,7 +1,7 @@
 <template>
     <div v-if="cota.isLoading" class="loading"></div>
 
-    <div v-else>
+    <div  v-else>
         <nav-header />
         <div class="col-12 flex-page d-flex">
             <div class="col-md-6 col-12 col-nuvem align-items-center justify-content-center">
@@ -56,9 +56,10 @@
                     <button type="button" @click="openModalPresentear"
                         class="btn btn-cota text-decoration-underline">Presentear</button>
                 </div>
-            
+
                 <div class="text-center">
-                    <h4 class="h4-arvore" style="font-size: 25px;color: #000;">Total de cotas: {{ cota.data.QuantidadeCotas }}</h4>
+                    <h4 class="h4-arvore" style="font-size: 25px;color: #000;">Total de cotas: {{ cota.data.QuantidadeCotas
+                    }}</h4>
 
                 </div>
             </div>
@@ -111,11 +112,15 @@
 
                     <div class="text-center p-t-12 d-flex align-items-center flex-column">
                         <div class="carousel-container">
-                            <div class="carousel h-100 active">
+                            <div class="carousel h-100 active" @click="expandirImagem">
                                 <img :src="cota.data.Projeto[cota.currentIndex].UrlImagem" alt="Slide Image">
                             </div>
-                            <button class="prev" @click="prevSlide()">&#10094;</button>
-                            <button class="next" @click="nextSlide()">&#10095;</button>
+                            <div class="expandir" v-if="imagemExpandida">
+                                <img :src="cota.data.Projeto[cota.currentIndex].UrlImagem" alt="Slide Image">
+                                <button @click="contrairImagem"><span>&times;</span></button>
+                            </div>
+                            <button class="prev" @click="prevSlide">&#10094;</button>
+                            <button class="next" @click="nextSlide">&#10095;</button>
                         </div>
                         <div class="col-12 mt-2">
                             <h4 class="h4-nome-projeto">{{ cota.data.Projeto[cota.currentIndex].NomeProjeto }}</h4>
@@ -175,6 +180,18 @@ export default {
         });
 
         const cota = useCotaStore();
+
+        const imagemExpandida = ref(false);
+
+        const expandirImagem = () => {
+            imagemExpandida.value = true;
+        };
+
+        const contrairImagem = () => {
+            imagemExpandida.value = false;
+        };
+
+
 
         const arvorePlantada = computed(() => {
             const resultado = (cota.data.QuantidadeCotas / 20) - cota.data.QuantidadeResgatada;
@@ -276,16 +293,51 @@ export default {
             showCardPresentearMobile,
             openModalNotificacao,
             openModalPresentear,
+            expandirImagem,
+            imagemExpandida,
+            contrairImagem,
         };
     },
 };
 </script>
 
 <style scoped>
+.expandir {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    color: white;
+    /* Cor do texto no fundo escuro */
+
+}
+
+.expandir img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* Adicione estilos para o botão de fechar, se necessário */
+.expandir button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
 .carousel-container {
     position: relative;
     width: 80%;
-    height: 160px;
+    height: 100%;
     overflow: hidden;
     border-radius: 60px;
     margin-top: 5%;
@@ -302,6 +354,8 @@ export default {
     height: 100%;
     object-fit: cover;
     border-radius: 15px;
+    cursor: pointer;
+
 }
 
 .prev {

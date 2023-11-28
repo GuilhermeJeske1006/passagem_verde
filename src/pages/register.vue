@@ -135,15 +135,18 @@
                                 </div> -->
 
 
-                                <div class="form-group d-flex m-3">
+                                <div class="form-group d-grid m-3">
                                         <p class="text-danger" v-if="errors.aceite">{{ errors.aceite }}</p>
-                                        <input class="ml-5 mr-5"  v-model="usuario.cadastro.aceite"
+                                        <div class="d-flex">
+                                            <input class="m-2 mt-0 mb-0" style="transform: scale(1.4);" v-model="usuario.cadastro.aceite"
                                             type="checkbox" name="pass" placeholder="Sua Senha">
                                         <p class="font-weight-medium ml-5 mr-5" style="    margin-left: 10px;">Eu li e concordo com os
                                              <a href="https://plantacao.s3.amazonaws.com/termos.html" target="_blank"
                                              >Termos e Condições </a> e a 
                                              <a href="https://plantacao.s3.amazonaws.com/politica.html" target="_blank"
                                              >Política de Privacidade</a></p>
+                                        </div>
+                                        
                                 </div>
 
                                 

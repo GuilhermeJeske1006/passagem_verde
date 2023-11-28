@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
+@media only screen and (max-width: 400px){
+    .col-arvorometro {
+        height: 10vh !important;
+    }
+}
 
 @media only screen and (max-width: 600px) {
     .flex-page {
@@ -47,12 +52,13 @@
     }
 
     .icon-container {
+        position: absolute !important;
         left: 0 !important;
         top: 16% !important;
     }
 
     .col-arvorometro {
-        height: 75vh !important;
+        height: 100vh !important;
     }
 
     .btn-arvorometro {
@@ -729,13 +735,13 @@ text-align: start;
 
 
 .icon-container {
-    position: absolute;
+    position: relative;
     width: 40px;
     height: 40px;
     background-color: #147933;
     border-radius: 50%;
-    left: 19%;
-    top: 1%;
+    left: 42%;
+    top: -12%;
     cursor: pointer;
 }
 
