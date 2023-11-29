@@ -27,14 +27,15 @@ export const useCotaStore = defineStore("cota", {
       isMobile: false,
       showCardAdquirir: false,
       showModalAdquirir: false,
-      showQtdCota: true,
+      showQtdCota: false,
       showModalPresentear: false,
       showModalPresente: false,
       showCardPresente: false,
       showCardPresentear: false,
       isToastVisible: true,
       showNotificacao: false,
-      showMetodoPagamento: false,
+      showMetodoPagamento: true,
+      showCardCredito: false,
       showCardPix: false,
       showModalInformacao: false,
       credito: {
@@ -322,10 +323,13 @@ export const useCotaStore = defineStore("cota", {
     },
 
       closeModalAdquirir () {
-            this.showModalAdquirir = false
-            this.metodo.credito = false
-            this.metodo.pix = false
-            document.body.classList.remove('modal-open');
+        this.showModalAdquirir = false
+        this.metodo.credito = false
+        this.metodo.pix = false
+        this.showMetodoPagamento = true
+        this.showQtdCota = false
+
+        document.body.classList.remove('modal-open');
         },
 
        closeModalCredito () {

@@ -2,7 +2,7 @@
     <div class="modal" tabindex="-1" role="dialog" @click.stop
         :class="{ 'show': cota.showModalAdquirir, 'd-block': cota.showModalAdquirir }">
         <div class="modal-dialog" role="document">
-            <form @submit.prevent="submitAdquirir" v-if="cota.showQtdCota" class="modal-content">
+            <form @submit.prevent="irPagamento" v-if="cota.showQtdCota" class="modal-content">
 
                 <div class="modal-body">
                     <button type="button" class="btn" @click="closeModalAdquirir">
@@ -12,7 +12,7 @@
                     <div class="btn-number text-center">
                         <p class="text-danger" v-if="cota.errors.cotaAquirir">{{ cota.errors.cotaAquirir }}</p>
                         <button type="button" @click="cota.cotas > 0 ? cota.cotas--  : cota.cotas = 0" class="btn btn-plus">-</button>
-                        <input type="number"  class="input-number" v-model="cota.cotas" min="2" >
+                        <input type="number"  class="input-number" v-model="cota.cotas" :min="validaQtdMetodo()" >
                         <button type="button" @click="cota.cotas++" class="btn btn-plus">+</button>
 
                         <br>
@@ -50,7 +50,7 @@
                         </div>
                     </div>
                     <div class="text-center">
-                        <button @click="irPagamento" class="btn btn-adquirir">Próximo</button>
+                        <button @click="irQtdCota" class="btn btn-adquirir">Próximo</button>
                     </div>
 
 
@@ -75,14 +75,14 @@ export default {
         
 
         const submitAdquirir = () => {
-            if (cota.cotas < 2) {
-                cota.errors.cotaAquirir = 'O valor da cota não pode ser menor que dois';
-            } else {
+            // if (cota.cotas < 1) {
+            //     cota.errors.cotaAquirir = 'O valor da cota não pode ser menor que dois';
+            // } else {
                 cota.showQtdCota = false
                 cota.showMetodoPagamento = true
                 // closeModalAdquirir();
                 // console.log('Cotas adquiridas com sucesso');
-            }
+            // }
         };
 
         const valorTotal = computed(() => {
@@ -91,7 +91,12 @@ export default {
             return total.toFixed(2);
         });
 
-        
+        const validaQtdMetodo = () => {
+            if(cota.metodo.credito){
+                return 2
+            }
+            return 1
+        }
 
 
         const checkCheckbox = () => {
@@ -105,11 +110,21 @@ export default {
             cota.showModalAdquirir = false
             cota.metodo.credito = false
             cota.metodo.pix = false
-            cota.showMetodoPagamento = false
-            cota.showQtdCota = true
+            cota.showMetodoPagamento = true
+            cota.showQtdCota = false
 
             document.body.classList.remove('modal-open');
         };
+
+        const irQtdCota = () => {
+            if (cota.metodo.pix == true || cota.metodo.credito == true) {
+                cota.showQtdCota = true
+                cota.showMetodoPagamento = false
+            } else {
+                cota.errors.metodoPreencher = 'Por favor! selecione algum dos metodos para prosseguir!'
+            }
+            
+        }
 
         const irPagamento = () => {
             if (cota.metodo.pix == true || cota.metodo.credito == true) {
@@ -148,6 +163,8 @@ export default {
             openModalPix,
             openModalCredito,
             valorTotal,
+            irQtdCota,
+            validaQtdMetodo
         }
     },
 }
