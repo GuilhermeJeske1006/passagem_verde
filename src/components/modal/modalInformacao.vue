@@ -34,20 +34,25 @@ export default {
     props: {
         text: String,
         tela: String
+
     },
 
     setup(props) {
         const cota = useCotaStore()
 
         const closeModalInformacao = () => {
-            if(props.tela == 'register'){
-                router.push("/login");
-                cota.showModalInformacao = false;
-                document.body.classList.remove('modal-open');
-            }else{
-                cota.showModalInformacao = false;
-                document.body.classList.remove('modal-open');
-            }
+          if (props.tela == 'login'){
+            cota.closeModalEsquecerSenha()
+            router.push('/redefinir')
+          }
+          if(props.tela == 'register'){
+            router.push("/login");
+            cota.showModalInformacao = false;
+            document.body.classList.remove('modal-open');
+          }else{
+            cota.showModalInformacao = false;
+            document.body.classList.remove('modal-open');
+          }
             
         };
 

@@ -40,11 +40,14 @@
                     </span>
 
 
+                  <p style="color: red" v-if="erroNewPassword.erroCodigo != ''">
+                    {{ erroNewPassword.erroCodigo }}
+                  </p>
                     <div class="wrap-input100 validate-input" data-validate="Password is required">
-                        <input class="input100" v-model="usuario.senhaAtual" type="password" name="pass" placeholder="Senha atual">
+                        <input class="input100" @input="validateCodigo" v-model="usuario.codigo" type="text" name="pass" placeholder="Código enviado">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
-                            <i class="fa fa-lock" aria-hidden="true"></i>
+                            <i class="fa fa-code" aria-hidden="true"></i>
                         </span>
                     </div>
 
@@ -115,11 +118,21 @@ export default {
         const usuario = useUsuarioStore();
 
         const erroNewPassword = ref({
+          erroCodigo: "",
+                erro: "",
             erroMinimo: "A senha deve ter pelo menos 8 caracteres",
                 erroMinusculo: "A senha deve conter pelo menos um caractere Maiusculo",
                 erroSimbolo:
                     "A senha deve conter pelo menos um símbolo ou caractere de especial.",
         })
+
+      const validateCodigo = () => {
+            if (usuario.codigo.length < 6) {
+                erroNewPassword.value.erroCodigo = "O código deve ter pelo menos 6 caracteres";
+            } else {
+                erroNewPassword.value.erroCodigo = "";
+            }
+        }
 
         const validatePassword = () => {
             const newPassword = usuario.novaSenha;
@@ -164,7 +177,8 @@ export default {
             erroNewPassword,
             validateNewPassword,
             validatePassword,
-            redefinir
+            redefinir,
+          validateCodigo
             
         };
     },

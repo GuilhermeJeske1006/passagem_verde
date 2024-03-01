@@ -38,6 +38,7 @@ export const useCotaStore = defineStore("cota", {
       showCardCredito: false,
       showCardPix: false,
       showModalInformacao: false,
+      showModalEsquecerSenha: false,
       credito: {
         nome: "",
         bandeira: "",
@@ -344,10 +345,21 @@ export const useCotaStore = defineStore("cota", {
             document.body.classList.remove('modal-open');
 
         },
+
+     closeModalEsquecerSenha () {
+      this.showModalEsquecerSenha = false
+      document.body.classList.remove('modal-open');
+
+    },
         openModalPresente() {
           this.showModalPresente = true;
           document.body.classList.add('modal-open');
       },
+
+    openModalEsquecerSenha (){
+      this.showModalEsquecerSenha = true;
+      document.body.classList.add('modal-open');
+    },
 
       openModalInformacao (){
         this.showModalInformacao = true;

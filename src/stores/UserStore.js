@@ -7,6 +7,7 @@ import { useCotaStore } from "./CotaStore";
 export const useUsuarioStore = defineStore("usuario", {
   state() {
     return {
+      codigo: "",
       isLoading: false,
       username: "",
       password: "",
@@ -84,14 +85,44 @@ export const useUsuarioStore = defineStore("usuario", {
       router.push("/login");
     },
 
+    enviarCodigo(email) {
+      const apiUrl = "https://api.passagemverde.com.br/user/forgot";
+
+      const dataToSend = {
+          EMAIL: email,
+      };
+      fetch(apiUrl, {
+        method: "PUT",
+        body: JSON.stringify(dataToSend),
+      })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Erro na resposta da API");
+            }
+            return response.json();
+          })
+          .then(() => {
+            const cota = useCotaStore()
+            cota.openModalInformacao()
+            
+            useToast().success("Codigo enviado com sucesso com sucesso!");
+          })
+          .catch((error) => {
+
+
+            useToast().error("Ops! Occoreu um erro ao enviar o codigo!");
+            console.error("Erro ao fazer a solicitação POST:", error);
+          });
+    },
+
     redefinir() {
-      const apiUrl = "https://cognito-idp.us-east-1.amazonaws.com/";
+      const apiUrl = "https://api.passagemverde.com.br/user/forgot";
 
       const dataToSend = {
         ChallengeName: "NEW_PASSWORD_REQUIRED",
         ChallengeResponses: {
-          USERNAME: localStorage.getItem("username"),
-          NEW_PASSWORD: this.repeteSenha,
+          CODIGO: this.codigo,
+          NEW_PASSWORD: this.novaSenha
         },
         ClientId: "2ba84o1sr4kpn5ucbvgg6sm40o",
         Session: localStorage.getItem("session"),

@@ -51,12 +51,12 @@
           </div>
 
           <div class="text-center p-t-12">
-            <!-- <span class="txt1">
-							Forgot
+             <span class="txt1">
 						</span>
-						<a class="txt2" href="#">
-							Username / Password?
-						</a> -->
+						<a class="txt2" @click="cota.openModalEsquecerSenha()">
+              Esqueceu
+              a Senha?
+						</a>
           </div>
 
           <div class="text-center p-t-136">
@@ -69,7 +69,8 @@
       </div>
     </div>
   </div>
-  <modal-informacao :text="'Caso seja seu primeiro acesso, por favor informe a senha que você recebeu por e-mail.'" />
+  <modal-esquecer-senha />
+  <modal-informacao :text="InformacaoText()" :tela="informacaoTela()" />
 </template>
   
 <script>
@@ -77,14 +78,29 @@ import { useUsuarioStore } from "@/stores/UserStore";
 import { ref } from "vue";
 import modalInformacao from '@/components/modal/modalInformacao.vue';
 import { useCotaStore } from '@/stores/CotaStore';
+import ModalEsquecerSenha from "@/components/modal/modalEsquecerSenha.vue";
 
 export default {
-  components: { modalInformacao },
+  components: {ModalEsquecerSenha, modalInformacao },
   name: "LoginView",
   setup() {
 
     const cota = useCotaStore()
     const usuario = useUsuarioStore();
+
+    const informacaoTela = () => {
+      if(cota.showModalEsquecerSenha){
+        return 'login'
+      }
+      return ''
+    }
+
+    const InformacaoText = () => {
+      if(cota.showModalEsquecerSenha){
+        return 'Por favor! verifique a sua caixa de entrada no email e resgate o código enviado para prosseguir! A seguir você sera redirecionado para a página de redefinição de senha.'
+      }
+      return 'Caso seja seu primeiro acesso, por favor informe a senha que você recebeu por e-mail.'
+    }
 
     const errors = ref({
       username: "",
@@ -107,7 +123,9 @@ export default {
       usuario,
       login,
       errors,
-      cota
+      cota,
+      InformacaoText,
+      informacaoTela
     };
   },
 };
