@@ -13,9 +13,9 @@
 
                 <div class="nuvem">
                     <div class="speech-bubble">
-                        <p class="p-speech">Faltam apenas <span class="font-bold">{{ 20 - folhasCota }} {{ 20 - folhasCota
+                        <p class="p-speech">Com mais  <span class="font-bold">{{ 20 - folhasCota }} {{ 20 - folhasCota
                             == 1 ? 'cota' : 'cotas' }}</span><br>
-                            para você plantar sua <br> árvore!</p>
+                             você plantar sua <br> árvore!</p>
                     </div>
                 </div>
                 <figure class="arvore">
@@ -111,6 +111,11 @@
                     </div>
 
                     <div class="text-center p-t-12 d-flex align-items-center flex-column">
+                        <div class="col-12 mt-4">
+                            <h4 class="h4-nome-projeto">{{ cota.data.Projeto[cota.currentIndex].NomeProjeto }}</h4>
+                            <a :href="cota.data.Projeto[cota.currentIndex].UrlSite" target="_blank"
+                                class="p-nome-projeto">Ver o mapa dos locais de plantio</a>
+                        </div>
                         <div class="carousel-container">
                             <div class="carousel h-100 active" @click="expandirImagem">
                                 <img :src="cota.data.Projeto[cota.currentIndex].UrlImagem" alt="Slide Image">
@@ -122,11 +127,11 @@
                             <button class="prev" @click="prevSlide">&#10094;</button>
                             <button class="next" @click="nextSlide">&#10095;</button>
                         </div>
-                        <div class="col-12 mt-2">
+                        <!-- <div class="col-12 mt-2">
                             <h4 class="h4-nome-projeto">{{ cota.data.Projeto[cota.currentIndex].NomeProjeto }}</h4>
                             <a :href="cota.data.Projeto[cota.currentIndex].UrlSite" target="_blank"
                                 class="p-nome-projeto">Ver o mapa dos locais de plantio</a>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -340,7 +345,7 @@ export default {
     height: 100%;
     overflow: hidden;
     border-radius: 60px;
-    margin-top: 5%;
+    margin-top: 2%;
 }
 
 .carousel {
