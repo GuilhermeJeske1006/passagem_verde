@@ -113,8 +113,8 @@
                     <div class="text-center p-t-12 d-flex align-items-center flex-column">
                         <div class="col-12 mt-4">
                             <h4 class="h4-nome-projeto">{{ cota.data.Projeto[cota.currentIndex].NomeProjeto }}</h4>
-                            <a :href="cota.data.Projeto[cota.currentIndex].UrlSite" target="_blank"
-                                class="p-nome-projeto">Ver o mapa dos locais de plantio</a>
+                            <!-- <a :href="cota.data.Projeto[cota.currentIndex].UrlSite" target="_blank"
+                                class="p-nome-projeto">Ver o mapa dos locais de plantio</a> -->
                         </div>
                         <div class="carousel-container">
                             <div class="carousel h-100 active" @click="expandirImagem">
@@ -127,11 +127,10 @@
                             <button class="prev" @click="prevSlide">&#10094;</button>
                             <button class="next" @click="nextSlide">&#10095;</button>
                         </div>
-                        <!-- <div class="col-12 mt-2">
-                            <h4 class="h4-nome-projeto">{{ cota.data.Projeto[cota.currentIndex].NomeProjeto }}</h4>
+                        <div class="col-12 mt-2">
                             <a :href="cota.data.Projeto[cota.currentIndex].UrlSite" target="_blank"
                                 class="p-nome-projeto">Ver o mapa dos locais de plantio</a>
-                        </div> -->
+                        </div>
                     </div>
                 </div>
             </div>
