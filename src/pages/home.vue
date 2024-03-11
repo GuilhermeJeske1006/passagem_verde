@@ -113,7 +113,7 @@
                     <div class="text-center p-t-12 d-flex align-items-center flex-column">
                         <div class="col-12 mt-5 ">
                             <a :href="cota.data.Projeto[cota.currentIndex].UrlSite" target="_blank"
-                                class=" pt-2 pb-2 btn btn-cota">Ver o mapa dos locais de plantio</a>
+                                class=" pt-2 pb-2 btn btn-cota text-decoration-underline">Ver o mapa dos locais de plantio</a>
                             <!-- <a :href="cota.data.Projeto[cota.currentIndex].UrlSite" target="_blank"
                                 class="p-nome-projeto">Ver o mapa dos locais de plantio</a> -->
                         </div>
