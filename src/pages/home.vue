@@ -111,8 +111,9 @@
                     </div>
 
                     <div class="text-center p-t-12 d-flex align-items-center flex-column">
-                        <div class="col-12 mt-4">
-                            <h4 class="h4-nome-projeto">{{ cota.data.Projeto[cota.currentIndex].NomeProjeto }}</h4>
+                        <div class="col-12 mt-5 ">
+                            <a :href="cota.data.Projeto[cota.currentIndex].UrlSite" target="_blank"
+                                class=" pt-2 pb-2 btn btn-cota">Ver o mapa dos locais de plantio</a>
                             <!-- <a :href="cota.data.Projeto[cota.currentIndex].UrlSite" target="_blank"
                                 class="p-nome-projeto">Ver o mapa dos locais de plantio</a> -->
                         </div>
@@ -128,8 +129,9 @@
                             <button class="next" @click="nextSlide">&#10095;</button>
                         </div>
                         <div class="col-12 mt-2">
-                            <a :href="cota.data.Projeto[cota.currentIndex].UrlSite" target="_blank"
-                                class="p-nome-projeto">Ver o mapa dos locais de plantio</a>
+                            <h4 class="
+                            h4-nome-projeto
+                            ">{{ cota.data.Projeto[cota.currentIndex].NomeProjeto }}</h4>
                         </div>
                     </div>
                 </div>

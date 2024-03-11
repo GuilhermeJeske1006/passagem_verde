@@ -92,7 +92,7 @@ export const useUsuarioStore = defineStore("usuario", {
           EMAIL: email,
       };
       fetch(apiUrl, {
-        method: "PUT",
+        method: "POST",
         body: JSON.stringify(dataToSend),
       })
           .then((response) => {

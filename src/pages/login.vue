@@ -53,10 +53,10 @@
           <div class="text-center p-t-12">
              <span class="txt1">
 						</span>
-						<!-- <a class="txt2" @click="cota.openModalEsquecerSenha()">
+						<a class="txt2" @click="cota.openModalEsquecerSenha()">
               Esqueceu
               a Senha?
-						</a> -->
+						</a>
           </div>
 
           <div class="text-center p-t-136">
