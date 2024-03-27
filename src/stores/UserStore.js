@@ -86,18 +86,21 @@ export const useUsuarioStore = defineStore("usuario", {
     },
 
     enviarCodigo(email) {
-      const apiUrl = "https://api.passagemverde.com.br/user/forgot";
+      const apiUrl = "https://api.passagemverde.com.br/forgot";
 
       const dataToSend = {
           EMAIL: email,
       };
       fetch(apiUrl, {
-        method: "PUT",
+        method: "POST",
         body: JSON.stringify(dataToSend),
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
           .then((response) => {
             if (!response.ok) {
-              throw new Error("Erro na resposta da API");
+              throw new Error(response);
             }
             return response.json();
           })
@@ -108,6 +111,7 @@ export const useUsuarioStore = defineStore("usuario", {
             useToast().success("Codigo enviado com sucesso com sucesso!");
           })
           .catch((error) => {
+            console.error( error);
 
 
             useToast().error("Ops! Occoreu um erro ao enviar o codigo!");
@@ -116,7 +120,7 @@ export const useUsuarioStore = defineStore("usuario", {
     },
 
     redefinir() {
-      const apiUrl = "https://api.passagemverde.com.br/user/forgot";
+      const apiUrl = "https://api.passagemverde.com.br/forgot";
 
       const dataToSend = {
         ChallengeName: "NEW_PASSWORD_REQUIRED",
@@ -129,7 +133,7 @@ export const useUsuarioStore = defineStore("usuario", {
       };
 
       fetch(apiUrl, {
-        method: "POST",
+        method: "PUT",
         headers: {
           "X-Amz-Target":
             "AWSCognitoIdentityProviderService.RespondToAuthChallenge",
