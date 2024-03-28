@@ -7,6 +7,7 @@ import { useCotaStore } from "./CotaStore";
 export const useUsuarioStore = defineStore("usuario", {
   state() {
     return {
+      codUsername: "",
       codigo: "",
       isLoading: false,
       username: "",
@@ -104,7 +105,10 @@ export const useUsuarioStore = defineStore("usuario", {
             }
             return response.json();
           })
-          .then(() => {
+          .then((res) => {
+            console.log(res.Username);
+            this.codUsername = res.Username;
+            console.log(this.codUsername, "username");
             const cota = useCotaStore()
             cota.openModalInformacao()
             
@@ -123,23 +127,14 @@ export const useUsuarioStore = defineStore("usuario", {
       const apiUrl = "https://api.passagemverde.com.br/forgot";
 
       const dataToSend = {
-        ChallengeName: "NEW_PASSWORD_REQUIRED",
-        ChallengeResponses: {
-          CODIGO: this.codigo,
-          NEW_PASSWORD: this.novaSenha
-        },
-        ClientId: "2ba84o1sr4kpn5ucbvgg6sm40o",
-        Session: localStorage.getItem("session"),
+        username: this.codUsername,
+        ConfirmationCode: this.codigo,
+        NewPassword: this.novaSenha,
       };
 
       fetch(apiUrl, {
         method: "PUT",
-        headers: {
-          "X-Amz-Target":
-            "AWSCognitoIdentityProviderService.RespondToAuthChallenge",
-          "Content-Type": "application/x-amz-json-1.1",
-        },
-        body: JSON.stringify(dataToSend), // Converte o objeto para JSON
+        body: JSON.stringify(dataToSend), 
       })
         .then((response) => {
           if (!response.ok) {
@@ -147,12 +142,7 @@ export const useUsuarioStore = defineStore("usuario", {
           }
           return response.json();
         })
-        .then((data) => {
-          // Faça algo com a resposta da API, se necessário
-          if (data.AuthenticationResult.IdToken != null) {
-            localStorage.setItem("token", data.AuthenticationResult.IdToken);
-            router.push("/");
-          }
+        .then(() => {
           useToast().success("Senha redefinida com sucesso!");
         })
         .catch((error) => {
